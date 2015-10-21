@@ -1,0 +1,151 @@
+package rhnavigator;
+
+import java.util.ArrayList;
+import java.util.PriorityQueue;
+import java.util.Stack;
+
+import rhnavigator.costfunctions.*;
+
+/**
+ * @author Jake Taylor David Runzhi
+ *
+ */
+
+public class MapPoint {
+	public double latitude, longitude, cost;
+	private String name;
+	public PriorityQueue<NeighboringPoint> neighbors;
+	private CostFunction costEstimate;
+
+	public MapPoint(double latitude, double longitude, String name) {
+		neighbors = new PriorityQueue<NeighboringPoint>();
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.name = name;
+	}
+
+	public void addNeighbor(MapPoint point) {
+		NeighboringPoint neighboringPoint = new NeighboringPoint(point);
+		neighbors.add(neighboringPoint);
+	}
+
+	/**
+	 * This function returns a priority queue of closest neighbors to this
+	 * mapPoint
+	 * 
+	 * @return PriorityQueue<MapPoint>
+	 */
+	public PriorityQueue<MapPoint> getNeighbors() {
+		// This is a bandage way to use it, try to figure it out the best way to
+		// do it
+		PriorityQueue<MapPoint> temp = new PriorityQueue<MapPoint>();
+		java.util.Iterator<NeighboringPoint> i = neighbors.iterator();
+		while (i.hasNext()) {
+			temp.add(i.next().point);
+		}
+		return temp;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public ArrayList<MapPoint> getShortestDistancePath(MapPoint goal) {
+		this.costEstimate = new DistanceCostFunction();
+		return findShortestPath(goal);
+	}
+
+	public ArrayList<MapPoint> getShortestTimePath(MapPoint goal) {
+		this.costEstimate = new TimeCostFunction();
+		return findShortestPath(goal);
+	}
+
+	private ArrayList<MapPoint> findShortestPath(MapPoint goal) {
+
+		ArrayList<MapPoint> closedset = new ArrayList<MapPoint>();
+
+		PriorityQueue<MapPoint> openset = new PriorityQueue<MapPoint>();
+		openset.offer(this);
+
+		Stack<MapPoint> cameFrom = new Stack<MapPoint>();
+		int tripCost = 0;
+
+		int heuriticCost = tripCost + costEstimate.calculate(this, goal);
+
+		while (!openset.isEmpty()) {
+			MapPoint current = openset.poll();
+
+			if (current.equals(goal)) {
+				cameFrom.add(current);
+				return reconstructPath(cameFrom);
+			}
+
+			cameFrom.add(current);
+			closedset.add(current);
+
+			java.util.Iterator<NeighboringPoint> t = current.neighbors.iterator();
+			while (t.hasNext()) {
+				MapPoint neighbor = t.next().point;
+				int neighborToGoalCost=costEstimate.calculate(neighbor, goal);
+				int currentToNeighBorCost=costEstimate.calculate(current, neighbor);
+				
+				if (closedset.contains(neighbor)||(neighborToGoalCost>heuriticCost)) {
+					continue;
+				}
+				
+				tripCost +=currentToNeighBorCost;
+				openset.offer(neighbor);
+				if (neighbor.equals(goal)) {
+					break;
+				}
+			}
+		}
+		return  reconstructPath(cameFrom);
+	}
+
+	private ArrayList<MapPoint> reconstructPath(Stack<MapPoint> cameFrom) {
+		ArrayList<MapPoint> totalPath = new ArrayList<MapPoint>();
+		totalPath.addAll(cameFrom);
+		//totalPath.add(current);
+		return totalPath;
+	}
+
+
+	private class NeighboringPoint implements Comparable<NeighboringPoint> { // AKA
+																				// roads
+		MapPoint point;
+		private int cost;
+
+		public NeighboringPoint(MapPoint point) {
+			this.point = point;
+			// there need to be another way to store the neighboring points
+			CostFunction func = new DistanceCostFunction();
+			UpdateCost(func);
+		}
+
+		public NeighboringPoint(MapPoint point, CostFunction func) {
+			this.point = point;
+			UpdateCost(func);
+		}
+
+		public void UpdateCost(CostFunction func) {
+			cost = func.calculate(MapPoint.this, point);
+		}
+
+		public int compareTo(NeighboringPoint neighbor) {
+			return this.cost - neighbor.cost;
+		}
+
+		public String toString() {
+			return "<" + point.getName() + ", " + cost + ">";
+		}
+	}
+
+	public String toString() {
+		return "\n(" + name + ", " + neighbors.toString() + ")\n";
+	}
+}

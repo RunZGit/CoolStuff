@@ -1,0 +1,72 @@
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+public class SkipList<T extends Comparable<? super T>> {
+	public Node root;
+
+	public SkipList() {
+		root = new Node();
+	}
+
+	public boolean insert(T e) {
+		return true;
+	}
+
+	public boolean remove(T e) {
+		return false;
+	}
+	public void insert(T i, int size) {
+		
+	}
+
+	public class Node {
+		private int size;
+		private ArrayList<Node> link;
+		private LinkedList headNode;
+		private Node() {
+			link=new ArrayList<Node>();
+			size=21;
+			headNode= new LinkedList();
+		}
+
+		private Node(T element) {
+			link=new ArrayList<Node>();
+			size=21;
+			headNode=new LinkedList();
+			headNode.add(element);
+			
+//			this.add(element);
+//			for(int i=0;i<21;i++){
+//				link.add()
+//			}
+			
+		}
+		private Node (T element, int size){
+			link=new ArrayList<Node>();
+			this.size=size;
+		}
+
+		public T getElement() {
+			return (T)headNode.element();
+		}
+
+		public ArrayList<Node> getLinks(){
+			return link;
+		}
+		
+		public int size(){
+			return size;
+		}
+		
+		public String toString(){
+			String temp="";
+			for(int i=0; i<21;i++){
+				
+			}
+			return temp;
+		}
+
+	}
+
+
+}

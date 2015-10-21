@@ -1,0 +1,24 @@
+package aStarPathFinding;
+import java.util.ArrayList;
+import rhnavigator.MapPoint;
+
+public class PathFinding {
+	private MapPoint current;
+	private MapPoint destination;
+	private ArrayList<MapPoint> route;
+	private int cost;
+	private String preferences;
+	
+	
+	public PathFinding(MapPoint current,String destination, MapPoint preferences){
+		this.current=current;
+		this.destination=destination;
+		this.preferences=preferences;
+		this.route=new ArrayList<MapPoint>();
+	}
+	
+	public ArrayList<MapPoint> findShortestPath(MapPoint temp){
+		 
+		return null;
+	}
+}

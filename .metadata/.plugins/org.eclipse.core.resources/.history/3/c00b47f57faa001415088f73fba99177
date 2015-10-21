@@ -1,0 +1,165 @@
+/* HW #8, Problem 1. */
+
+/* At the moment, the 'insert' and 'contains' methods just manipulate an
+ * ordinary sorted, singly-linked list.  You are to replace the existing 
+ * implementations of those methods with a true skip list.  You'll
+ * probably also want to fill in randomHeight as well.  Compare the
+ * node-visit statistics before and after your change.   See the data
+ * file ~cs61b/lib/hw8/someWords if you'd like a little test data:
+ *      java SkipListTest < ~cs61b/lib/hw8/someWords
+ * for example.
+ * */
+
+import java.util.*;
+
+public class SkipList<T extends Comparable<? super T>> {
+  /** Maximum number of next pointers in any node of the list. */
+  static final protected int MAX_HEIGHT = 30;
+
+  private int size;
+
+  /** The left sentinel, which compares less than all other values. */
+  private final Node<T> sentinel0 
+    = new Node<T> (null, MAX_HEIGHT);
+  /** The right sentinel, which compares greater than all other values. */
+  private final Node<T> sentinel1 
+    = new Node<T> (null, MAX_HEIGHT);
+
+  /** An empty SkipList */
+  public SkipList () {  
+    size = 0; 
+    for (int i = 0; i < MAX_HEIGHT; i += 1)
+      sentinel0.next[i] = sentinel1;
+  }
+
+  /** An iterator giving all the labels in THIS [not including sentinels]. */
+  public Iterator<T> iterator () {
+    return new Iterator<T> () {
+	Node<T> w = sentinel0.next[0];
+	public boolean hasNext () { return w != sentinel1; }
+	public T next () {
+	  if (!hasNext ()) throw new NoSuchElementException ();
+	  T result = w.label;
+	  w = w.next[0];
+	  totalVisited += 1;
+	  return result;
+	}
+	public void remove () {
+	  throw new UnsupportedOperationException (); 
+	}
+      };
+  }
+
+  /** True iff THIS contains the label L. */
+  public boolean contains (T L) {
+    // REPLACE WITH REAL SOLUTION
+    for (Node<T> p = sentinel0.next[0]; p != sentinel1; p = p.next[0]) {
+      totalVisited += 1;
+      int c = compareTo (p, L);
+      if (c < 0)
+	continue;
+      else if (c == 0)
+	return true;
+      else
+	return false;
+    }
+      
+    return false;
+  }  
+  
+  /** insert label L to THIS. */
+  public void insert (T L) {
+    // REPLACE WITH REAL SOLUTION
+    Node<T> p;
+    for (p = sentinel0; p.next[0] != sentinel1; p = p.next[0]) {
+      totalVisited += 1;
+      int c = compareTo (p.next[0], L);
+      if (c < 0)
+	continue;
+      else if (c == 0)
+	return;
+      else
+	break;
+    }
+
+    Node<T> p1 = p.next[0];
+    p.next[0] = new Node<T> (L, 1);
+    p.next[0].next[0] = p1;
+  }
+
+  /** A random integer between 1 and MAX_HEIGHT, such that the probability
+   *  that the result is K is roughly 1/2 the probability that the result is K-1. */
+  int randomHeight () {
+    // REPLACE WITH SOLUTION
+    return 1;
+  }
+    
+  /** Returns < 0 if Y should be inserted after node X, ==0 if node X
+   *  contains Y, and >0 otherwise. */
+  private int compareTo (Node<T> x, T y) {
+    if (x == sentinel1)
+      return 1;
+    else if (x == sentinel0)
+      return -1;
+    else
+      return x.label.compareTo (y);
+  }
+
+   static class Node<T extends Comparable<? super T>> {
+    T label;
+    Node<T>[] next;
+    Node (T label, int height) {
+      this.label = label; 
+      /* Ignore the warning from the next line. */
+      next = (Node<T>[]) new Node[height];
+    }
+  }
+
+  public int totalVisited () {
+    return totalVisited;
+  }
+
+  /** Count of the total number of nodes visited since THIS was created.
+   *  Incremented by insert, contains, and the next method of iterator(). */
+  private int totalVisited;
+
+}
+
+//class SkipListTest {
+//  /** Read in words separated by whitespace from the standard input, place
+//   *  in a skip list, and then check that each word can be found in the
+//   *  skip list.  Print statistics about nodes searched. */
+//  public static void main (String[] args) {
+//    Scanner in = new Scanner (System.in);
+//    int maxVisits;
+//
+//    List<String> inp = new LinkedList<String> ();
+//    while (in.hasNext ())
+//      inp.insert (in.next ());
+//
+//    SkipList<String> sl = new SkipList<String> ();
+//    int max;
+//    max = 0;
+//    for (String str : inp) {
+//      int v0 = sl.totalVisited ();
+//      sl.insert (str);
+//      if (sl.totalVisited () - v0 > max)
+//	max = sl.totalVisited () - v0;
+//    }
+//
+//    for (String str : inp) {
+//      int v0 = sl.totalVisited ();
+//      if (! sl.contains (str)) {
+//	System.err.printf ("Error: '%s' not found.%n", str);
+//	System.exit (1);
+//      }
+//      if (sl.totalVisited () - v0 > max)
+//	max = sl.totalVisited () - v0;
+//    }
+//
+//    System.out.printf ("inserted and then searched for %d strings.%n"
+//		       + "   Maximum nodes visited for any search or insertition: %d%n"
+//		       + "   Total nodes visited for all searches and insertitions: %d\n",
+//		       inp.size(), max, sl.totalVisited ());
+//  }
+

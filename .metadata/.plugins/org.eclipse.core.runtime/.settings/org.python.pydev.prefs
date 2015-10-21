@@ -1,0 +1,12 @@
+CHECK_PREFERRED_PYDEV_SETTINGS=false
+COMMENT_COLOR=255,0,255
+DOCSTRING\ CHARACTER="
+FORMAT_BEFORE_SAVING=true
+INTERPRETERS_CHECKED_ONCE=true
+PYDEV_FUNDING_SHOWN_2014=true
+PYDEV_NEW_PROJECT_CREATE_PREFERENCES=0
+PY_TODO_TAGS=TODO\: FIXME\: CONSIDER\: HELP\: GRADER\: XXX\:
+TRIM_EMPTY_LINES=true
+eclipse.preferences.version=1
+org.eclipse.ui.texteditor.templates.preferences.format_templates=true
+org.python.pydev.editor.templates.PyTemplatePreferencesPage=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><templates><template autoinsert\="true" context\="org.python.pydev.editor.templates.python.modules" deleted\="false" description\="Standard module for csse120" enabled\="true" name\="&lt;csse120 module&gt;">"""&\#13;\r\n&lt;describe what this module has/does&gt;&\#13;\r\n&\#13;\r\nCreated on ${date}.&\#13;\r\n&\#13;\r\nAuthor\: ${user}.&\#13;\r\n"""&\#13;\r\n&\#13;\r\n&\#13;\r\ndef main()\:&\#13;\r\n    """ Calls the   TEST   functions in this module. """&\#13;\r\n    pass&\#13;\r\n${cursor}&\#13;\r\n&\#13;\r\n\#-----------------------------------------------------------------------&\#13;\r\n\# If this module is running at the top level (as opposed to being&\#13;\r\n\# imported by another module), then call the 'main' function.&\#13;\r\n\#-----------------------------------------------------------------------&\#13;\r\nif __name__ \=\= '__main__'\:&\#13;\r\n    main()&\#13;\r\n</template></templates>

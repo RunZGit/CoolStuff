@@ -1,0 +1,448 @@
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Stack;
+
+
+/**
+ * 
+ * @author Runzhi Yang implements Iterable<T>?????????
+ * @param <T>
+ */
+public class BinarySearchTree<T extends Comparable<? super T>> implements Iterable<T> {
+	private BinaryNode root;
+	private int globalCounter;
+	private int size;
+
+	/**
+	 * EmptyTree constructor
+	 */
+	public BinarySearchTree() {
+		this.root = null;
+		this.globalCounter = 0;
+		this.size = 0;
+	}
+
+	/**
+	 * This constructs a tree with root of n
+	 * 
+	 * @param n
+	 */
+	public BinarySearchTree(BinaryNode n) {
+		this.root = n;
+		this.globalCounter = 0;
+		this.size = 1;
+	}
+
+	/**
+	 * this method gets the height of the tree
+	 * 
+	 * @return height
+	 */
+	public int height() {
+		if (isEmpty()) {
+			return -1;
+		}
+		return root.height();
+	}
+
+	/**
+	 * This method gets the size of the tree
+	 * 
+	 * @return size
+	 */
+	public int size() {
+		return size;
+	}
+
+	/**
+	 * This method checks the tree is empty or not
+	 * 
+	 * @return true or false
+	 */
+	public boolean isEmpty() {
+		return root == null;
+	}
+
+	/**
+	 * This method converts the tree to a string
+	 * 
+	 * @return The tree in a string
+	 */
+	public String toString() {
+		return this.toArrayList().toString();
+	}
+
+	/**
+	 * This method constructs an inorder iterator
+	 * 
+	 * @return inOrderIterator
+	 */
+	public Iterator<T> iterator() {
+		return new InOrderIterator(root);
+	}
+
+	/**
+	 * This method constructs an preorder iterator
+	 * 
+	 * @return preOrderIterator
+	 */
+	public Iterator<T> preOrderIterator() {
+		return new PreOrderIterator(root);
+	}
+
+	/**
+	 * This method puts all the objects in the tree into inorder arrayList
+	 * 
+	 * @return
+	 */
+	public ArrayList<T> toArrayList() {
+		if (isEmpty()) {
+			return new ArrayList<T>();
+		}
+		return root.toArrayList();
+
+	}
+
+	/**
+	 * This method puts all the objects in the tree into an inorder array
+	 * 
+	 * @return
+	 */
+	public Object[] toArray() {
+		return this.toArrayList().toArray();
+	}
+
+	/**
+	 * This method inserts a type t element into the tree
+	 * 
+	 * @param i
+	 * @return true or false
+	 */
+	public boolean insert(T i) {
+		MyBoolean hasInserted = new MyBoolean();
+		if (i == null) {
+			throw new IllegalArgumentException();
+		}
+		this.globalCounter++;
+		if (root == null) {
+			root = new BinaryNode(i);
+		} else {
+			root.insert(i, hasInserted);
+		}
+		if (hasInserted.getValue()) {
+			size++;
+		}
+		return hasInserted.getValue();
+
+	}
+
+	/**
+	 * This method removes the element i
+	 * 
+	 * @param i
+	 * @return true or false
+	 */
+	public boolean remove(T i) {
+		MyBoolean hasRemoved = new MyBoolean();
+		if (root == null) {
+			hasRemoved.setFalse();
+		} else if (i == null) {
+			throw new IllegalArgumentException();
+		} else {
+			root = root.remove(i, hasRemoved);
+		}
+		if (hasRemoved.getValue()) {
+			size--;
+		}
+		return hasRemoved.getValue();
+	}
+
+	// ----------------------------------------------------------------------------
+	private class BinaryNode {
+		private T element;
+		private BinaryNode leftChild;
+		private BinaryNode rightChild;
+
+		/**
+		 * This is an BinaryNode constructer
+		 * 
+		 * @param element
+		 */
+		public BinaryNode(T element) {
+			this.element = element;
+			this.leftChild = null;
+			this.rightChild = null;
+		}
+
+		public BinaryNode findMaxNode() {
+			if (this.leftChild == null && this.rightChild == null) {
+				return this;
+			}
+			if (this.rightChild.element.compareTo(this.element) > 0) {
+				return this.rightChild.findMaxNode();
+			} else
+				return this;
+		}
+//		private BinaryNode findMaxNode(){
+//			BinaryNode temp=this;
+//			while(this.leftChild!=null){
+//				temp=this.leftChild;
+//			}
+//			return temp;
+//		}
+
+		public BinaryNode remove(T i, MyBoolean hasRemoved) {
+			int comp = this.element.compareTo(i);
+			if (comp == 0) {
+				if (this.rightChild == null && this.leftChild != null) {
+					return leftChild;
+				}
+				if (this.rightChild != null) {
+					if (this.leftChild == null) {
+						return rightChild;
+					}
+					if (this.leftChild != null) {
+						BinaryNode node = this.leftChild.findMaxNode();
+						this.remove(node.element, hasRemoved);
+						node.rightChild = this.rightChild;
+						node.leftChild = this.leftChild;
+						return node;
+					}
+				}
+				return null;
+			} else if (this.leftChild == null && this.rightChild == null
+					&& comp != 0) {
+				hasRemoved.setFalse();
+			} else if (comp < 0) {
+				this.rightChild = this.rightChild.remove(i, hasRemoved);
+			} else if (comp > 0) {
+				this.leftChild = this.leftChild.remove(i, hasRemoved);
+			}
+			return this;
+		}
+
+		/**
+		 * This method inserts an object of type T into the BinarySearchTree
+		 * 
+		 * @param i
+		 * @return
+		 */
+		public BinaryNode insert(T i, MyBoolean hasInserted) {
+			int comp = i.compareTo(this.element);
+			if (comp == 0) {
+				hasInserted.setFalse();
+			}
+			if (comp > 0) {
+				if (this.rightChild != null) {
+					this.rightChild = rightChild.insert(i, hasInserted);
+				} else {
+					this.rightChild = new BinaryNode(i);
+				}
+			} else if (comp < 0) {
+				if (this.leftChild != null) {
+					this.leftChild = leftChild.insert(i, hasInserted);
+				} else {
+					this.leftChild = new BinaryNode(i);
+				}
+			}
+			return this;
+		}
+
+		/**
+		 * This tells the height of the node
+		 * 
+		 * @return height
+		 */
+		public int height() {
+			int leftHeight = -1;
+			int rightHeight = -1;
+			if (leftChild != null) {
+				leftHeight = leftChild.height();
+			}
+			if (rightChild != null) {
+				rightHeight = rightChild.height();
+			}
+			return Math.max(leftHeight, rightHeight) + 1;
+		}
+
+		/**
+		 * This method converts the binaryNode into an arrayList
+		 * 
+		 * @return ArrayList
+		 */
+		public ArrayList<T> toArrayList() {
+			ArrayList<T> a = new ArrayList<T>();
+			InOrderIterator i= new InOrderIterator(root);
+			while(i.hasNext()){
+				a.add(i.next());
+			}
+			return a;
+		}
+	}
+
+	// ---------------------------------------------------------------
+	private class MyBoolean {
+		private boolean myboolean;
+
+		public MyBoolean() {
+			this.myboolean = true;
+		}
+
+		public void setFalse() {
+			this.myboolean = false;
+		}
+
+		public boolean getValue() {
+			return this.myboolean;
+		}
+	}
+
+	// ---------------------------------------------------------------------------
+	private class PreOrderIterator implements Iterator<T> {
+		private Stack<BinaryNode> stack;
+		private BinaryNode current;
+		private int localCounter;
+		boolean hasCalled;
+		boolean hasRemoved;
+
+		/**
+		 * This construts an preOrderOteratpr
+		 * 
+		 * @param root
+		 */
+		public PreOrderIterator(BinaryNode root) {
+			this.stack = new Stack<BinaryNode>();
+			this.current = root;
+			this.localCounter = globalCounter;
+			if (root != null) {
+				stack.push(root);
+			}
+			this.hasCalled = false;
+			this.hasRemoved = false;
+		}
+
+		/**
+		 * This method checks if the current element has a next node
+		 * 
+		 * @return true or false
+		 */
+		@Override
+		public boolean hasNext() {
+			if (current == null) {
+				return false;
+			}
+			return !stack.isEmpty();
+		}
+
+		@Override
+		public void remove() {
+			if (stack.isEmpty() || this.hasCalled == false
+					|| this.hasRemoved == true) {
+				throw new IllegalStateException();
+			}
+			BinarySearchTree.this.remove(current.element);
+			this.hasRemoved = true;
+		}
+
+		/**
+		 * This method returns the next node
+		 */
+		@Override
+		public T next() {
+			this.hasCalled = true;
+			this.hasRemoved = false;
+			if (globalCounter != localCounter) {
+				throw new ConcurrentModificationException();
+			}
+			if (!this.hasNext()) {
+				throw new NoSuchElementException();
+			}
+			current = stack.pop();
+			if (current.rightChild != null) {
+				stack.push(current.rightChild);
+			}
+			if (current.leftChild != null) {
+				stack.push(current.leftChild);
+			}
+			return current.element;
+		}
+	}
+
+	// --------------------------------------
+	private class InOrderIterator implements Iterator<T> {
+		private Stack<BinaryNode> stack;
+		private BinaryNode current;
+		private int localCounter;
+		boolean hasCalled;
+		boolean hasRemoved;
+
+		/**
+		 * This method construts an inOrderIterator
+		 * 
+		 * @param root
+		 */
+		public InOrderIterator(BinaryNode node) {
+			this.stack = new Stack<BinaryNode>();
+			this.current = root;
+			this.localCounter = globalCounter;
+			this.hasCalled = false;
+			this.hasRemoved = false;
+
+			if (current != null) {
+				stack.push(current);
+				while (current.leftChild != null) {
+					stack.push(current.leftChild);
+					current = current.leftChild;
+				}
+			}
+		}
+
+		@Override
+		public void remove() {
+			if (stack.isEmpty() || this.hasCalled == false
+					|| this.hasRemoved == true) {
+				throw new IllegalStateException();
+			}
+			BinarySearchTree.this.remove(current.element);
+			this.hasRemoved = true;
+		}
+
+		/**
+		 * This method checks if the current element has a next node
+		 * 
+		 * @return true or false
+		 */
+		@Override
+		public boolean hasNext() {
+			return !stack.isEmpty();
+		}
+
+		/**
+		 * This method returns the next node
+		 */
+		@Override
+		public T next() {
+			this.hasCalled = true;
+			this.hasRemoved = false;
+			if (globalCounter != localCounter) {
+				throw new ConcurrentModificationException();
+			}
+			if (!this.hasNext()) {
+				throw new NoSuchElementException();
+			}
+			current = stack.pop();
+			this.pushLeftChildren(current.rightChild);
+			return current.element;
+		}
+
+		private void pushLeftChildren(BinaryNode node) {
+			while (node != null) {
+				stack.push(node);
+				node = node.leftChild;
+			}
+		}
+	}
+
+}

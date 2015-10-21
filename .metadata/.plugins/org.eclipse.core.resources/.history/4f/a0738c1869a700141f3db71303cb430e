@@ -1,0 +1,639 @@
+
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Stack;
+/**
+ * 
+ * @author Mark Vitale
+ *
+ * @param <T> the type of object this Red Black tree is made up of (a generic)
+ */
+public class RedBlackTree<T extends Comparable<? super T>> implements Iterable<RedBlackTree.BinaryNode> {
+	
+	private BinaryNode root;
+	private int modNum;
+	private int rotationCount;
+	private int doubleRotationCount;
+	private int size;
+	
+	/**
+	 * Constructs a new, empty Red Black Tree. Takes no arguments.
+	 */
+	public RedBlackTree(){
+		root = null;
+		modNum = 0;
+		rotationCount = 0;
+		doubleRotationCount=0;
+		size=0;
+	}
+	/**
+	 * Inserts a new element into this tree.
+	 * The element is placed as a left-child of elements it is smaller than (as defined by compareTo)
+	 * or a right-child of elements it is larger than (as defined by compareTo)
+	 * As this tree is a set, not a collection, if the new element already exists in this tree, no modification occurs.
+	 * Null is considered an illegal argument, and as such throws an IllegalArgumentException when passed in.
+	 * This tree remains balanced and rotates the trees around to ensure the height is minimized.
+	 * 
+	 * 
+	 * @param o the object to be inserted  into the tree.
+	 * @return a boolean representing whether or not the tree has been modified.
+	 */
+	public boolean insert(T element){
+		if(element==null){
+			throw new IllegalArgumentException();
+		}
+		boolean returnValue;
+		if(root==null){
+			root = new BinaryNode(element);
+			returnValue = true;
+		}else{ 
+			returnValue = insert(element, root, null, null);}
+		root.c = Color.BLACK;
+		if(returnValue) modNum++; size++;
+		return returnValue;
+	}
+	public int getDoubleRotationCount(){
+		return doubleRotationCount;
+	}
+	private boolean insert(T element, BinaryNode c, BinaryNode p, BinaryNode gp){
+		boolean returnValue = false;
+		twoRedChildrenSwap(c,p,gp);
+		if(element.compareTo(c.element) < 0){
+			if(c.leftChild == null){
+				c.leftChild = new BinaryNode(element);
+				returnValue = true;
+				rotationCheck(c.leftChild,c,p);
+			}
+			else returnValue = insert(element, c.leftChild,c,p);
+		}
+		else if(element.compareTo(c.element) > 0){
+			if(c.rightChild == null){
+				c.rightChild = new BinaryNode(element);
+				returnValue = true;
+				rotationCheck(c.rightChild,c,p);
+			}
+			else returnValue = insert(element, c.rightChild,c,p);
+		}
+		return returnValue;
+	}
+	
+	private void twoRedChildrenSwap(BinaryNode c, BinaryNode p, BinaryNode gp){
+		if(c.leftChild!=null&&c.rightChild!=null&&c.leftChild.c==Color.RED && c.rightChild.c==Color.RED){
+			c.c = Color.RED;
+			c.leftChild.c = Color.BLACK;
+			c.rightChild.c = Color.BLACK;
+			rotationCheck(c,p,gp);
+		}
+	}
+	
+	private void rotationCheck(BinaryNode c, BinaryNode p, BinaryNode gp){
+		if(gp!=null&&c!=null&&p!=null&&c.c==Color.RED&&p.c==Color.RED){
+			if(gp.leftChild == p && p.leftChild == c){
+				rotateWithLeftChild(gp);
+				gp.c = Color.BLACK;
+				gp.rightChild.c = Color.RED;
+			}else if(gp.rightChild == p && p.rightChild == c){
+				rotateWithRightChild(gp);
+				gp.c = Color.BLACK;
+				gp.leftChild.c = Color.RED;
+			}else if(gp.leftChild == p && p.rightChild == c){
+				doubleRotateWithLeftChild(gp);
+				gp.c = Color.BLACK;
+				gp.rightChild.c = Color.RED;
+			}else if(gp.rightChild == p && p.leftChild == c){
+				doubleRotateWithRightChild(gp);
+				gp.c = Color.BLACK;
+				gp.leftChild.c = Color.RED;
+			}
+		}
+	}
+	
+	public boolean remove(T element){
+		if(element==null){
+			throw new IllegalArgumentException();
+		}
+		if(root==null){
+			return false;
+		}
+		boolean returnValue = stepOne(element);
+		//step 4
+		if(root!=null)root.c = Color.BLACK;
+		if(returnValue) size--;
+		return returnValue;
+	}
+	
+	private boolean stepOne(T element){
+		if(root.childrenAreBlack()){
+			root.c = Color.RED;
+			if(element.compareTo(root.element)==0){
+				return stepThree(element, root, null);
+			}
+			else if(element.compareTo(root.element)<0){
+				if(root.leftChild==null)return false;
+				return stepTwo(element,root.leftChild, root);
+			}
+			else if(element.compareTo(root.element)>0){
+				if(root.rightChild==null)return false;
+				return stepTwo(element,root.rightChild, root);
+			}
+		}
+		return stepTwoB(element, root, null);
+	}
+	public int size(){
+		return size;
+	}
+	private boolean stepTwo(T element, BinaryNode cNode, BinaryNode pNode){
+		if(cNode.childrenAreBlack()){
+			return stepTwoA(element,cNode,pNode);
+		}
+		else return stepTwoB(element, cNode, pNode);
+	}
+	
+	private boolean stepTwoA(T element, BinaryNode cNode, BinaryNode pNode){
+		BinaryNode sNode;
+		boolean sNodeIsLeft=true;
+		if(pNode!=null&&pNode.leftChild==cNode){
+			sNode = pNode.rightChild;
+			sNodeIsLeft=false;
+		}
+		else sNode = pNode.leftChild;
+		
+		if(sNode.childrenAreBlack()){
+			return stepTwoA1(element, cNode,sNode, pNode);
+		}
+		else if((sNode.leftChild!=null&&sNode.leftChild.c==Color.RED)
+				&&(sNode.rightChild!=null&&sNode.rightChild.c==Color.RED)){
+			return stepTwoA3(element, cNode, sNode,sNodeIsLeft, pNode);
+		}
+		else if(sNodeIsLeft&&(sNode.leftChild!=null&&sNode.leftChild.c==Color.RED)){
+			return stepTwoA3(element, cNode,sNode,sNodeIsLeft,pNode);
+		}
+		else if(!sNodeIsLeft&&(sNode.rightChild!=null&&sNode.rightChild.c==Color.RED)){
+			return stepTwoA3(element, cNode,sNode,sNodeIsLeft,pNode);
+		}
+		else if(sNodeIsLeft&&(sNode.rightChild!=null&&sNode.rightChild.c==Color.RED)){
+			return stepTwoA2(element, cNode,sNode,sNodeIsLeft,pNode);
+		}
+		else if(!sNodeIsLeft&&(sNode.leftChild!=null&&sNode.leftChild.c==Color.RED)){
+			return stepTwoA2(element, cNode,sNode,sNodeIsLeft,pNode);
+		}
+		return stepTwoA1(element,cNode,sNode,pNode);
+	}
+	
+	private boolean stepTwoA1(T element, BinaryNode cNode, BinaryNode sNode, BinaryNode pNode){
+		cNode.flipColor();
+		sNode.flipColor();
+		pNode.flipColor();
+		if(element.compareTo(cNode.element)==0){
+			return stepThree(element, cNode, pNode);
+		}
+		else if(element.compareTo(cNode.element)<0){
+			if(cNode.leftChild==null)return false;
+			return stepTwo(element,cNode.leftChild, cNode);
+		}
+		else{ //if(element.compareTo(cNode.element)>0){
+			if(cNode.rightChild==null)return false;
+			return stepTwo(element,cNode.rightChild, cNode);
+		}
+	}
+	
+	private boolean stepTwoA2(T element, BinaryNode cNode, BinaryNode sNode,boolean sNodeIsLeft,BinaryNode pNode){
+		BinaryNode c2Node;
+		BinaryNode p2Node;
+		if(sNodeIsLeft){
+			doubleRotateWithLeftChild(pNode);
+			pNode.rightChild.c=Color.BLACK;
+			pNode.leftChild.c=Color.BLACK;
+			pNode.rightChild.rightChild.c=Color.RED;
+			c2Node = pNode.rightChild.rightChild;
+			p2Node = pNode.rightChild;
+		}
+		else{
+			doubleRotateWithRightChild(pNode);
+			pNode.leftChild.c=Color.BLACK;
+			pNode.rightChild.c=Color.BLACK;
+			pNode.leftChild.leftChild.c=Color.RED;
+			c2Node = pNode.leftChild.leftChild;
+			p2Node = pNode.leftChild;
+			
+		}
+		if(element.compareTo(c2Node.element)==0){
+			return stepThree(element, c2Node, p2Node);
+		}
+		else if(element.compareTo(c2Node.element)<0){
+			if(cNode.leftChild==null)return false;
+			return stepTwo(element,c2Node.leftChild, c2Node);
+		}
+		else{ //if(element.compareTo(cNode.element)>0){
+			if(cNode.rightChild==null)return false;
+			return stepTwo(element,c2Node.rightChild, c2Node);
+		}
+	}
+	
+	private boolean stepTwoA3(T element, BinaryNode cNode, BinaryNode sNode,boolean sNodeIsLeft, BinaryNode pNode){
+		BinaryNode c2Node;
+		BinaryNode p2Node;
+		if(sNodeIsLeft){
+			rotateWithLeftChild(pNode);
+			pNode.c=Color.RED;
+			pNode.leftChild.c=Color.BLACK;
+			pNode.rightChild.c=Color.BLACK;
+			pNode.rightChild.rightChild.c=Color.RED;
+			c2Node = pNode.rightChild.rightChild;
+			p2Node = pNode.rightChild;
+		}
+		else{
+			rotateWithRightChild(pNode);
+			pNode.c=Color.RED;
+			pNode.rightChild.c=Color.BLACK;
+			pNode.leftChild.c=Color.BLACK;
+			pNode.leftChild.leftChild.c=Color.RED;
+			c2Node = pNode.leftChild.leftChild;
+			p2Node = pNode.leftChild;
+		}
+		if(element.compareTo(c2Node.element)==0){
+			return stepThree(element, c2Node, p2Node);
+		}
+		else if(element.compareTo(c2Node.element)<0){
+			if(cNode.leftChild==null)return false;
+			return stepTwo(element,c2Node.leftChild, c2Node);
+		}
+		else{ //if(element.compareTo(cNode.element)>0){
+			if(cNode.rightChild==null)return false;
+			return stepTwo(element,c2Node.rightChild, c2Node);
+		}
+	}
+	
+	private boolean stepTwoB(T element, BinaryNode cNode,BinaryNode pNode){
+		if(element.compareTo(cNode.element)==0){
+			return stepThree(element, cNode, pNode);
+		}
+		else if(element.compareTo(cNode.element)<0){
+			if(cNode.leftChild==null)return false;
+			if(cNode.leftChild.c==Color.RED)return stepTwoB1(element,cNode.leftChild, cNode);
+			else return stepTwoB2(element,cNode.leftChild,cNode);
+		}
+		else{ //if(element.compareTo(cNode.element)>0){
+			if(cNode.rightChild==null)return false;
+			if(cNode.rightChild.c==Color.RED)return stepTwoB1(element,cNode.rightChild, cNode);
+			else return stepTwoB2(element,cNode.rightChild,cNode);
+		}
+	}
+	
+	private boolean stepTwoB1(T element, BinaryNode cNode,BinaryNode pNode){
+		if(element.compareTo(cNode.element)==0){
+			return stepThree(element, cNode, pNode);
+		}
+		else if(element.compareTo(cNode.element)<0){
+			if(cNode.leftChild==null)return false;
+			return stepTwo(element,cNode.leftChild, cNode);
+		}
+		else{ //if(element.compareTo(cNode.element)>0){
+			if(cNode.rightChild==null)return false;
+			return stepTwo(element,cNode.rightChild, cNode);
+		}
+	}
+	
+	private boolean stepTwoB2(T element, BinaryNode cNode,BinaryNode pNode){
+//		BinaryNode sNode;
+		BinaryNode c2Node;
+		BinaryNode p2Node;
+		boolean sNodeIsLeft=true;
+		if(pNode.leftChild==cNode){
+//			sNode = pNode.rightChild;
+			sNodeIsLeft=false;
+		}
+//		else sNode = pNode.leftChild;
+		
+		if(sNodeIsLeft){
+			rotateWithLeftChild(pNode);
+			pNode.c=Color.BLACK;
+			pNode.rightChild.c=Color.RED;
+			pNode.rightChild.rightChild.c=Color.BLACK;
+//			cNode.rightChild.c=Color.BLACK;
+			c2Node = pNode.rightChild.rightChild;
+			p2Node = pNode.rightChild;
+		}
+		else{
+			rotateWithRightChild(pNode);
+			pNode.c=Color.BLACK;
+			pNode.leftChild.c=Color.RED;
+			pNode.leftChild.leftChild.c=Color.BLACK;
+			c2Node = pNode.leftChild.leftChild;
+			p2Node = pNode.leftChild;
+		}
+		
+		return stepTwo(element, c2Node,p2Node);
+	}
+	
+	private boolean stepThree(T element, BinaryNode cNode,BinaryNode pNode){
+		boolean returnValue;
+		if(cNode.hasTwoChildren()){
+			T temp = cNode.largestElementInLeftSubtree();
+			if(cNode.c==Color.RED){
+				returnValue = stepTwo(temp,cNode.leftChild,cNode);
+			}
+			else returnValue = stepTwoB(temp,cNode,pNode);
+			
+			if(cNode.leftChild!=null&&cNode.leftChild.element==element){
+				cNode.leftChild.element=temp;
+			}else if(cNode.rightChild!=null&&cNode.rightChild.element==element) cNode.rightChild.element=temp;
+			else cNode.element = temp;
+			return returnValue;
+			//copy largest of left tree into X, then remove the donor node by going to step 2 with its value
+			
+		}
+		if(cNode.isLeaf()){
+			if(pNode==null){
+				//we are at the root
+				root=null;
+				return true;
+			}
+			if(pNode.leftChild==cNode)pNode.leftChild=null;
+			if(pNode.rightChild==cNode)pNode.rightChild=null;
+			return true;
+		}
+		else if(cNode.hasSingleLeftChild()){
+			if(pNode==null){
+				//we are at the root
+				root=cNode.leftChild;
+				return true;
+			}
+			if(cNode.c==Color.BLACK&&cNode.leftChild.c==Color.RED){
+				cNode.leftChild.c=Color.BLACK;
+			}
+			if(pNode.leftChild==cNode){
+				if(pNode.leftChild.c==Color.RED&&pNode.c==Color.BLACK)cNode.c=Color.BLACK;
+				pNode.leftChild=cNode.leftChild;
+			}
+			if(pNode.rightChild==cNode){
+				if(pNode.rightChild.c==Color.RED&&pNode.c==Color.BLACK)cNode.c=Color.BLACK;
+				pNode.rightChild=cNode.leftChild;
+			}
+			return true;
+		}
+		else{ //if(cNode.hasSingleRightChild()){
+			if(pNode==null){
+				//we are at the root
+				root=cNode.rightChild;
+				return true;
+			}
+			if(cNode.c==Color.BLACK&&cNode.rightChild.c==Color.RED){
+				cNode.rightChild.c=Color.BLACK;
+			}
+			if(pNode.leftChild==cNode){
+				if(pNode.leftChild.c==Color.RED&&pNode.c==Color.BLACK)cNode.c=Color.BLACK;
+				pNode.leftChild=cNode.rightChild;
+			}
+			if(pNode.rightChild==cNode){
+				if(pNode.rightChild.c==Color.RED&&pNode.c==Color.BLACK)cNode.c=Color.BLACK;
+
+				pNode.rightChild=cNode.rightChild;
+			}
+			return true;
+		}
+	}
+	
+	
+	
+	/**
+	 * Returns the current height of this tree.
+	 * 
+	 * @return the height of this tree. Returns -1 in the case of an empty tree.
+	 */
+	public int height(){
+		if(root==null){
+			return -1;
+		}
+		return countHeight(root);
+	}
+	
+	private int countHeight(BinaryNode node){
+		if(node!=null){
+			int lheight=countHeight(node.leftChild);
+			int rheight=countHeight(node.rightChild);
+			if(node.leftChild==null&&node.rightChild==null){
+				return 0;
+			}
+			return 1 + Math.max(lheight,rheight);
+		}
+		else return 0;
+	}
+	
+	/**
+	 * Returns a pre-order iterator of BinaryNodes.
+	 * Done this way for testing purposes.
+	 * 
+	 * Modifications to the tree while the iterator is still in use results in a ConcurrentModificationException.
+	 */
+	public Iterator<RedBlackTree.BinaryNode> iterator(){
+		return new PreOrderTreeIterator();
+	}
+	
+	private void rotateWithLeftChild(BinaryNode currentNode) {
+		BinaryNode leftBranch = currentNode.leftChild;
+		BinaryNode rightBranch = leftBranch.rightChild;
+		BinaryNode old = new BinaryNode(currentNode.element);
+		old.leftChild = rightBranch;
+		old.rightChild = currentNode.rightChild;
+		currentNode.element=leftBranch.element;
+		currentNode.leftChild = leftBranch.leftChild;
+		currentNode.rightChild = old;
+		rotationCount++;
+//		System.out.println(rotationCount);
+	}
+	
+	private void doubleRotateWithLeftChild(BinaryNode currentNode){
+		rotateWithRightChild(currentNode.leftChild);
+		rotateWithLeftChild(currentNode);
+		doubleRotationCount++;
+	}
+
+	private void rotateWithRightChild(BinaryNode currentNode) {
+		BinaryNode rightBranch = currentNode.rightChild;
+		BinaryNode leftBranch = rightBranch.leftChild;
+		BinaryNode old = new BinaryNode(currentNode.element);
+		old.rightChild = leftBranch;
+		old.leftChild = (currentNode.leftChild);
+		currentNode.element=rightBranch.element;
+		currentNode.rightChild = (rightBranch.rightChild);
+		currentNode.leftChild = (old);
+		rotationCount++;
+//		System.out.println(rotationCount);
+	}
+	
+	private void doubleRotateWithRightChild(BinaryNode currentNode){
+		rotateWithLeftChild(currentNode.rightChild);
+		rotateWithRightChild(currentNode);
+		doubleRotationCount++;
+	}
+	/**
+	 * Returns the number of rotations done on this tree up to this point.
+	 */
+	public int getRotationCount(){
+		return rotationCount;
+	}
+	
+	/**
+	 * A simple toString method that returns all of the items in this tree in preorder in the form "[elem,color,leftchild,rightchild]".
+	 * for each BinaryNode
+	 * 
+	 * @return a string containing all elements in this tree.
+	 */
+	public String toString(){
+		String returnString = "";
+		Iterator<RedBlackTree.BinaryNode> i = iterator();
+		while(i.hasNext()){
+			BinaryNode temp = i.next();
+			returnString += "["+temp+","+temp.c+","+temp.leftChild+","+temp.rightChild+"]\n";
+		}
+		return returnString;
+	}
+	
+	/**
+	 * an enumerator that is used to indicate whether a node is RED or BLACK.
+	 * @author vitalema
+	 *
+	 */
+	public enum Color {RED, BLACK}
+	
+	/**
+	 * Binary Node class for Red Black Tree. Left public for testing purposes only, thus will not be documented.
+	 * @author vitalema
+	 *
+	 */
+	public class BinaryNode {
+		
+		private T element;
+		private Color c;
+		private BinaryNode leftChild=null;
+		private BinaryNode rightChild=null;
+		
+		private void flipColor(){
+			if(c==Color.RED){
+				c=Color.BLACK;
+			}
+			else c=Color.RED;
+		}
+		
+		private BinaryNode(T elem){
+			this.element=elem;
+			c = Color.RED;
+		}
+		
+		public boolean hasSingleRightChild() {
+			return leftChild==null&&rightChild!=null;
+		}
+
+		public boolean hasSingleLeftChild() {
+			return leftChild!=null&&rightChild==null;
+		}
+
+		public T getElement() {
+			return element;
+		}
+		public Color getColor(){
+			return c;
+		}
+		
+		boolean childrenAreBlack(){
+			if(leftChild!=null&&leftChild.c==Color.RED){
+				return false;
+			}
+			if(rightChild!=null&&rightChild.c==Color.RED){
+				return false;
+			}
+			return true;
+		}
+		
+		boolean hasTwoChildren(){
+			if(leftChild!=null&&rightChild!=null) return true;
+			else return false;
+		}
+		
+		boolean isLeaf(){
+			return leftChild==null&&rightChild==null;
+		}
+		
+		T largestElementInLeftSubtree(){
+			BinaryNode cNode = leftChild;
+		
+			while(cNode.rightChild!=null){
+				cNode = cNode.rightChild;
+			}
+			return cNode.element;
+		}
+		
+		public String toString(){
+			return element.toString();
+		}
+	}
+	
+	/////////////////////////PREORDER ITERATOR CLASS
+	private class PreOrderTreeIterator implements Iterator<RedBlackTree.BinaryNode>{
+		private Stack<BinaryNode> s= new Stack<BinaryNode>();
+		private int storedModNum;
+//		private T toRemove=null;
+		
+		public PreOrderTreeIterator(){
+			if(root!=null){
+				s.push(root);
+			}
+			this.storedModNum=modNum;
+		}
+		
+		public boolean hasNext() {
+			return s.size()>0;
+		}
+
+		public BinaryNode next() {
+			if(this.storedModNum!=modNum){
+				throw new ConcurrentModificationException();
+			}
+			if(hasNext()){
+				BinaryNode currentNode = s.pop();
+//				toRemove = currentNode.element;
+				if(currentNode.rightChild!=null){
+					s.push(currentNode.rightChild);
+				}
+				if(currentNode.leftChild!=null){
+					s.push(currentNode.leftChild);
+				}
+				return currentNode;
+			}
+			else throw new NoSuchElementException("There are no more elements");
+		}
+
+		public void remove() {
+//			if(toRemove==null){
+//				throw new IllegalStateException();
+//			}
+//			root= root.remove(toRemove, new BooleanWrapper(false));
+//			storedModNum = modNum;
+//			toRemove=null;
+		}
+	}
+//	private class BooleanWrapper {
+//		
+//		private boolean mod;
+//		
+//		public BooleanWrapper(boolean b){
+//			mod=b;
+//		}
+//		
+//		public void setTrue(){
+//			modNum++;
+//			mod=true;
+//		}
+//		
+//		public void setFalse(){
+//			mod=false;
+//		}
+//		
+//		public boolean getValue(){
+//			return mod;
+//		}
+//		
+//	}
+}

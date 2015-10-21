@@ -1,0 +1,770 @@
+//import java.util.ArrayList;
+//import java.util.LinkedList;
+//
+//public class SkipList<T extends Comparable<? super T>> {
+//	public Node root;
+//
+//	public SkipList() {
+//		root = new Node();
+//	}
+//
+//	public boolean insert(T e) {
+//		return true;
+//	}
+//
+//	public boolean remove(T e) {
+//		return false;
+//	}
+//	public void insert(T i, int size) {
+//		
+//	}
+//
+//	public class Node {
+//		private int size;
+//		private ArrayList<Node> link;
+//		private LinkedList headNode;
+//		
+//		private Node() {
+//			link=new ArrayList<Node>();
+//			size=21;
+//			headNode= new LinkedList();
+//		}
+//
+//		private Node(T element) {
+//			link=new ArrayList<Node>();
+//			size=21;
+//			headNode=new LinkedList();
+//			headNode.add(element);
+//			
+////			this.add(element);
+////			for(int i=0;i<21;i++){
+////				link.add()
+////			}
+//			
+//		}
+//		private Node (T element, int size){
+//			link=new ArrayList<Node>();
+//			this.size=size;
+//		}
+//
+//		public T getElement() {
+//			return (T)headNode.element();
+//		}
+//
+//		public ArrayList<Node> getLinks(){
+//			return link;
+//		}
+//		
+//		public int size(){
+//			return size;
+//		}
+//		
+//		public String toString(){
+//			String temp="";
+//			for(int i=0; i<21;i++){
+//				
+//			}
+//			return temp;
+//		}
+//
+//	}
+//
+//
+//}
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Random;
+
+// ------------------------------------------------------------------------------
+/**
+ * SkipList is an implementation of a data structure for storing a sorted list
+ * of data elements, using a hierarchy of linked lists that connect increasingly
+ * sparse subsequences of the elements. The elements contained in the tree must
+ * be mutually comparable.
+ * 
+ * @author Michael D. Naper, Jr. <MichaelNaper.com>
+ * @version 2010.07.07
+ * 
+ * @param <E>
+ *            The generic type for data elements contained in the tree.
+ */
+public class SkipList<E extends Comparable<? super E>> implements Iterable<E> {
+
+    // ~ Nested Classes ........................................................
+
+    // -------------------------------------------------------------------------
+    /**
+     * ListNode is an implementation of a skip list node, which stores a data
+     * element and references to subsequent nodes.
+     */
+    private class ListNode {
+
+        // ~ Instance Variables ................................................
+
+        /**
+         * The data element stored in this node.
+         */
+        private E element;
+
+        /**
+         * The references to the subsequent nodes.
+         */
+        private ListNode[] next;
+
+        // ~ Constructors ......................................................
+
+        // ---------------------------------------------------------------------
+        /**
+         * Constructs a new instance of ListNode with the specified data element
+         * and level.
+         * 
+         * @param element
+         *            The element to be stored in the node.
+         * @param level
+         *            The level of the node.
+         */
+        @SuppressWarnings("unchecked")
+        public ListNode(E element, int level) {
+
+            this.element = element;
+
+            next = new SkipList.ListNode[level + 1];
+        }
+
+        // ~ Methods ...........................................................
+
+        // ---------------------------------------------------------------------
+        /**
+         * Returns the level of this ListNode.
+         */
+        public int level() {
+
+            return next.length - 1;
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    /**
+     * ListIterator is an iterator over the SkipList.
+     */
+    private class ListIterator implements Iterator<E> {
+
+        // ~ Instance Variables ................................................
+
+        /**
+         * The current node in the iteration.
+         */
+        private ListNode iterNode;
+
+        // ~ Constructors ......................................................
+
+        // ---------------------------------------------------------------------
+        /**
+         * Constructs a new instance of ListIterator.
+         */
+        public ListIterator() {
+
+            iterNode = head;
+        }
+
+        // ~ Methods ...........................................................
+
+        // ---------------------------------------------------------------------
+        /**
+         * Returns true if the iterator has more data elements.
+         * 
+         * @return True if the iterator has more elements.
+         */
+        @Override
+        public boolean hasNext() {
+
+            return iterNode.next[0] != null;
+        }
+
+        // ---------------------------------------------------------------------
+        /**
+         * Returns the next data element in the iteration.
+         * 
+         * @return The next element in the iteration.
+         */
+        @Override
+        public E next() {
+
+            iterNode = iterNode.next[0];
+
+            return iterNode.element;
+        }
+
+        // ---------------------------------------------------------------------
+        /**
+         * The removal method is unsupported by this implementation of Iterator.
+         */
+        @Override
+        public void remove() {
+
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    // ~ Instance Variables ....................................................
+
+    /**
+     * The reference to the header node of the list.
+     */
+    private ListNode head;
+
+    /**
+     * The size of the list.
+     */
+    private int size;
+
+    // ~ Constructors ..........................................................
+
+    // -------------------------------------------------------------------------
+    /**
+     * Constructs a new, empty instance of SkipList.
+     */
+    public SkipList() {
+
+        head = new ListNode(null, 0);
+
+        size = 0;
+    }
+
+    // ~ Methods ...............................................................
+
+    // -------------------------------------------------------------------------
+    /**
+     * Adds the specified data element to this SkipList, if the element is not
+     * already present.
+     * 
+     * @param element
+     *            The element to be inserted.
+     * @return True if insertion is performed.
+     */
+    public boolean add(E element) {
+
+        if (element == null) {
+            return false;
+        }
+
+        int maxLevel = head.level();
+
+        ListNode current = head;
+
+        @SuppressWarnings("unchecked")
+        ListNode[] nodePath = new SkipList.ListNode[maxLevel + 1];
+
+        for (int level = maxLevel; level >= 0; level--) {
+            while (current.next[level] != null
+                    && element.compareTo(current.next[level].element) > 0) {
+                current = current.next[level];
+            }
+
+            nodePath[level] = current;
+        }
+
+        current = current.next[0];
+
+        if (current != null && element.equals(current.element)) {
+            return false;
+        } else {
+            int nodeLevel = randomLevel();
+
+            if (nodeLevel > maxLevel) {
+                head.next = Arrays.copyOf(head.next, nodeLevel + 1);
+
+                nodePath = Arrays.copyOf(nodePath, nodeLevel + 1);
+
+                for (int level = maxLevel + 1; level <= nodeLevel; level++) {
+                    nodePath[level] = head;
+                }
+
+                maxLevel = nodeLevel;
+            }
+
+            current = new ListNode(element, nodeLevel);
+
+            for (int level = 0; level <= nodeLevel; level++) {
+                current.next[level] = nodePath[level].next[level];
+
+                nodePath[level].next[level] = current;
+            }
+
+            size++;
+
+            return true;
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    /**
+     * Returns a random level for a new node in the SkipList.
+     * 
+     * @return A random level for a new node in the SkipList.
+     */
+    private int randomLevel() {
+
+        int level;
+
+        Random rand = new Random();
+
+        for (level = 0; rand.nextInt() % 2 == 0; level++)
+            ;
+
+        return level;
+    }
+
+    // -------------------------------------------------------------------------
+    /**
+     * Adds all the data elements in the specified Collection to this SkipList,
+     * if the element is not already present.
+     * 
+     * @param elements
+     *            The collection of elements to be inserted.
+     * @return True if insertion is performed at least once.
+     */
+    public boolean addAll(Collection<? extends E> elements) {
+
+        if (elements == null) {
+            return false;
+        }
+
+        boolean hasInsertion = false;
+
+        for (E element : elements) {
+            hasInsertion = add(element) || hasInsertion;
+        }
+
+        return hasInsertion;
+    }
+
+    // -------------------------------------------------------------------------
+    /**
+     * Returns true if this SkipList contains the specified data element.
+     * 
+     * @param element
+     *            The element whose presence is to be tested.
+     * @return True if this SkipList contains the specified element.
+     */
+    public boolean contains(E element) {
+
+        if (element == null) {
+            return false;
+        }
+
+        return find(element) != null;
+    }
+
+    // -------------------------------------------------------------------------
+    /**
+     * Returns true if this SkipList contains all the data elements in the
+     * specified Collection.
+     * 
+     * @param elements
+     *            The collection of elements to be checked for containment.
+     * @return True if this SkipList contains all the elements in the specified
+     *         collection.
+     */
+    public boolean containsAll(Collection<? extends E> elements) {
+
+        if (elements == null) {
+            return false;
+        }
+
+        for (E element : elements) {
+            if (!contains(element)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // -------------------------------------------------------------------------
+    /**
+     * Returns a reference to the specified data element in this SkipList, or
+     * null if the element is not present.
+     * 
+     * @param element
+     *            The element to be found.
+     * @return The reference to the specified element in the list, or null if
+     *         the element is not present.
+     */
+    public E find(E element) {
+
+        if (element == null) {
+            return null;
+        }
+
+        ListNode current = head;
+
+        for (int level = head.level(); level >= 0; level--) {
+            while (current.next[level] != null
+                    && element.compareTo(current.next[level].element) >= 0) {
+                current = current.next[level];
+            }
+
+            if (element.equals(current.element)) {
+                return current.element;
+            }
+        }
+
+        return null;
+    }
+
+    // -------------------------------------------------------------------------
+    /**
+     * Returns the index of the specified data element in this SkipList, or -1
+     * if the element is not present.
+     * 
+     * @param element
+     *            The element whose index is to be found.
+     * @return The index of the specified data element in this SkipList, or -1
+     *         if the element is not present.
+     */
+    public int indexOf(E element) {
+
+        if (element == null) {
+            return -1;
+        }
+
+        ListNode current = head.next[0];
+
+        int pos;
+
+        for (pos = -1; current != null && !element.equals(current.element); pos++) {
+            current = current.next[0];
+        }
+
+        return (current == null) ? -1 : pos + 1;
+    }
+
+    // -------------------------------------------------------------------------
+    /**
+     * Returns the data element at the specified index in this SkipList.
+     * 
+     * @param index
+     *            The index of the element to be returned.
+     * @param The
+     *            element at the specified index in this SkipList.
+     */
+    public E get(int index) {
+
+        if (index < 0 || index > size) {
+            throw new IllegalArgumentException(
+                    "Index must be between zero and the list size.");
+        }
+
+        ListNode current = head.next[0];
+
+        for (int pos = 0; current != null && pos < index; pos++) {
+            current = current.next[0];
+        }
+
+        return (current == null) ? null : current.element;
+    }
+
+    // -------------------------------------------------------------------------
+    /**
+     * Returns the data element from this SkipList with the smallest key, if the
+     * element is present.
+     * 
+     * @return The element with the smallest key, or null if the list is empty.
+     */
+    public E getMin() {
+
+        return (head.next[0] == null) ? null : head.next[0].element;
+    }
+
+    // -------------------------------------------------------------------------
+    /**
+     * Returns the data element from this SkipList with the largest key, if the
+     * element is present.
+     * 
+     * @return The element with the largest key, or null if the list is empty.
+     */
+    public E getMax() {
+
+        if (head.next[0] == null) {
+            return null;
+        }
+
+        ListNode current = head;
+
+        for (int level = head.level(); level >= 0; level--) {
+            while (current.next[level] != null) {
+                current = current.next[level];
+            }
+        }
+
+        return current.element;
+    }
+
+    // -------------------------------------------------------------------------
+    /**
+     * Removes the specified data element from this SkipList, if the element is
+     * present.
+     * 
+     * @param element
+     *            The element to be removed.
+     * @return True if removal is performed.
+     */
+    public boolean remove(E element) {
+
+        if (element == null) {
+            return false;
+        }
+
+        int maxLevel = head.level();
+
+        ListNode current = head;
+
+        @SuppressWarnings("unchecked")
+        ListNode[] nodePath = new SkipList.ListNode[maxLevel + 1];
+
+        for (int level = maxLevel; level >= 0; level--) {
+            while (current.next[level] != null
+                    && element.compareTo(current.next[level].element) > 0) {
+                current = current.next[level];
+            }
+
+            nodePath[level] = current;
+        }
+
+        current = current.next[0];
+
+        if (current != null && element.equals(current.element)) {
+            int nodeLevel = current.level();
+
+            for (int level = 0; level <= nodeLevel; level++) {
+                if (nodePath[level].next[level] != current) {
+                    break;
+                }
+
+                nodePath[level].next[level] = current.next[level];
+            }
+
+            if (nodeLevel == maxLevel) {
+                while (maxLevel > 0 && head.next[maxLevel] == null) {
+                    maxLevel--;
+                }
+
+                head.next = Arrays.copyOf(head.next, maxLevel + 1);
+            }
+
+            size--;
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    /**
+     * Removes all the data elements in the specified Collection from this
+     * SkipList, if the element is present.
+     * 
+     * @param elements
+     *            The collection of elements to be removed.
+     * @return True if removal is performed at least once.
+     */
+    public boolean removeAll(Collection<? extends E> elements) {
+
+        if (elements == null) {
+            return false;
+        }
+
+        boolean hasRemoval = false;
+
+        for (E element : elements) {
+            hasRemoval = remove(element) || hasRemoval;
+        }
+
+        return hasRemoval;
+    }
+
+    // -------------------------------------------------------------------------
+    /**
+     * Removes and returns the data element from this SkipList with the smallest
+     * key, if the element is present.
+     * 
+     * @return The element with the smallest key, or null if the list is empty.
+     */
+    public E removeMin() {
+
+        if (head.next[0] == null) {
+            return null;
+        }
+
+        ListNode firstNode = head.next[0];
+
+        int nodeLevel = firstNode.level();
+
+        for (int level = 0; level <= nodeLevel; level++) {
+            head.next[level] = firstNode.next[level];
+        }
+
+        int maxLevel = head.level();
+
+        if (nodeLevel == maxLevel) {
+            while (maxLevel > 0 && head.next[maxLevel] == null) {
+                maxLevel--;
+            }
+
+            head.next = Arrays.copyOf(head.next, maxLevel + 1);
+        }
+
+        size--;
+
+        return firstNode.element;
+    }
+
+    // -------------------------------------------------------------------------
+    /**
+     * Removes and returns the data element from this SkipList with the largest
+     * key, if the element is present.
+     * 
+     * @return The element with the smallest key, or null if the list is empty.
+     */
+    public E removeMax() {
+
+        if (head.next[0] == null) {
+            return null;
+        }
+
+        int maxLevel = head.level();
+
+        ListNode current = head;
+
+        @SuppressWarnings("unchecked")
+        ListNode[] nodePath = new SkipList.ListNode[maxLevel + 1];
+
+        for (int level = maxLevel; level >= 0; level--) {
+            while (current.next[level] != null
+                    && current.next[level].next[0] != null) {
+                current = current.next[level];
+            }
+
+            nodePath[level] = current;
+        }
+
+        current = current.next[0];
+
+        int nodeLevel = current.level();
+
+        for (int level = 0; level <= nodeLevel; level++) {
+            if (nodePath[level].next[level] != current) {
+                break;
+            }
+
+            nodePath[level].next[level] = current.next[level];
+        }
+
+        if (nodeLevel == maxLevel) {
+            while (maxLevel > 0 && head.next[maxLevel] == null) {
+                maxLevel--;
+            }
+
+            head.next = Arrays.copyOf(head.next, maxLevel + 1);
+        }
+
+        size--;
+
+        return current.element;
+    }
+
+    // -------------------------------------------------------------------------
+    /**
+     * Removes all the data elements from this SkipList. The SkipList will be
+     * empty after this method returns.
+     */
+    public void clear() {
+
+        head = new ListNode(null, 0);
+
+        size = 0;
+    }
+
+    // -------------------------------------------------------------------------
+    /**
+     * Returns true if this SkipList contains no data elements. In other words,
+     * returns true if the size of this SkipList is zero.
+     * 
+     * @return True if this SkipList contains no elements.
+     */
+    public boolean isEmpty() {
+
+        return head.next[0] == null;
+    }
+
+    // -------------------------------------------------------------------------
+    /**
+     * Returns the number of data elements in this SkipList.
+     * 
+     * @return The number of elements in this SkipList.
+     */
+    public int size() {
+
+        return size;
+    }
+
+    // -------------------------------------------------------------------------
+    /**
+     * Returns an iterator over the data elements in this SkipList in order.
+     * 
+     * @return An Iterator over the elements in this SkipList.
+     */
+    public Iterator<E> iterator() {
+
+        return new ListIterator();
+    }
+
+    // -------------------------------------------------------------------------
+    /**
+     * Returns an array containing all the data elements in this SkipList in
+     * order.
+     * 
+     * @return An array containing all the elements in this SkipList.
+     */
+    @SuppressWarnings("rawtypes")
+    public Comparable[] toArray() {
+
+        Comparable[] result = new Comparable[size];
+
+        ListNode current = head.next[0];
+
+        for (int pos = 0; pos < size; pos++) {
+            result[pos] = current.element;
+
+            current = current.next[0];
+        }
+
+        return result;
+    }
+
+    // -------------------------------------------------------------------------
+    /**
+     * Returns a string representation of this SkipList. The returned string is
+     * a vertical list of the data elements contained in the list.
+     * 
+     * @return A string representation of this SkipList.
+     */
+    @Override
+    public String toString() {
+
+        StringBuilder result = new StringBuilder();
+
+        ListNode current = head.next[0];
+
+        while (current != null) {
+            result.append(current.element + "\n");
+
+            current = current.next[0];
+        }
+
+        return result.toString();
+    }
+}

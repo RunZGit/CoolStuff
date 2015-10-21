@@ -1,0 +1,858 @@
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Stack;
+
+/**
+ * 
+ * @author Runzhi Yang 12/19/2014
+ * @param <T>
+ */
+public class RedBlackTree<T extends Comparable<? super T>> implements
+		Iterable<RedBlackTree.BinaryNode> {
+	public BinaryNode root;
+	private int globalCounter;
+	private int size;
+	private int rotationCount;
+	private int doubleRotationCount;
+
+	public enum Color {
+		RED, BLACK
+	}
+
+	/**
+	 * EmptyTree constructor
+	 */
+	public RedBlackTree() {
+		this.root = null;
+		this.globalCounter = 0;
+		this.size = 0;
+		this.rotationCount = 0;
+		this.doubleRotationCount = 0;
+	}
+
+	/**
+	 * This constructs a tree with root of n
+	 * 
+	 * @param n
+	 */
+	public RedBlackTree(BinaryNode n) {
+		this.root = n;
+		this.globalCounter = 0;
+		this.size = 1;
+		this.rotationCount = 0;
+		this.doubleRotationCount = 0;
+	}
+
+	/**
+	 * this method gets the height of the tree
+	 * 
+	 * @return height
+	 */
+	public int height() {
+		return (root == null) ? -1 : root.height();
+	}
+
+	/**
+	 * This method gets the size of the tree
+	 * 
+	 * @return size
+	 */
+	public int size() {
+		return size;
+	}
+
+	/**
+	 * This method checks the tree is empty or not
+	 * 
+	 * @return true or false
+	 */
+	public boolean isEmpty() {
+		return root == null;
+	}
+
+	/**
+	 * This method converts the tree to a string
+	 *
+	 * @return The tree in a string
+	 */
+	public String toString() {
+		if (root == null) {
+			return " ";
+		}
+		return root.toString();
+	}
+
+	/**
+	 * This method constructs an inorder iterator
+	 * 
+	 * @return inOrderIterator
+	 */
+	public Iterator<RedBlackTree.BinaryNode> iterator() {
+		return new PreOrderIterator(root);
+	}
+
+	public Iterator<T> iterator(int i) {
+		return null;
+	}
+
+	/**
+	 * This method puts all the objects in the tree into inorder arrayList
+	 *
+	 * @return
+	 */
+	public ArrayList<T> toArrayList() {
+		if (isEmpty()) {
+			return new ArrayList<T>();
+		}
+		return root.toArrayList();
+
+	}
+
+	/**
+	 * This method inserts a type t element into the tree
+	 * 
+	 * @param i
+	 * @return true or false
+	 */
+	public boolean insert(T i) {
+		MyBoolean hasInserted = new MyBoolean();
+		if (i == null) {
+			throw new IllegalArgumentException();
+		}
+		if (root == null) {
+			this.root = new BinaryNode(i);
+		} else {
+			root.insert(i, hasInserted, root, null, null, null);
+		}
+		root.setBlack();
+		if (hasInserted.getValue()) {
+			size++;
+			this.globalCounter++;
+		}
+		return hasInserted.getValue();
+	}
+
+	public boolean remove(T i) {
+		MyBoolean hasRemoved = new MyBoolean();
+		if (i == null) {
+			throw new IllegalArgumentException();
+		}
+		// ------------------------------------------------------------
+		// make sure this line will be gone by the end, it will make it a
+		
+		// n^2Log(n)
+		if (root == null) {
+			hasRemoved.setFalse();
+		}
+		else {
+			root.remove(i, hasRemoved, root, null, null);
+		}
+		if (hasRemoved.getValue()) {
+			size--;
+			this.globalCounter++;
+		}
+		if (root != null) {
+			root.setBlack();
+		}
+		return hasRemoved.getValue();
+	}
+
+	/**
+	 * This returns the rotation count
+	 * 
+	 * @return rotationCount
+	 */
+	public int getRotationCount() {
+		return this.rotationCount;
+	}
+
+	public int getDoubleRotationCount() {
+		return this.doubleRotationCount;
+	}
+
+	private boolean contains(T i) {
+		return (root.toArrayList().contains(i)) ? true : false;
+	}
+
+	// ----------------------------------------------------------------------------
+	/**
+	 * This is a binaryNode that has all the characteristics of a RedBlack node
+	 * 
+	 * @author yangr
+	 *
+	 */
+	public class BinaryNode {
+		private T element;
+		private BinaryNode leftChild;
+		private BinaryNode rightChild;
+		private Color color;
+
+		/**
+		 * This is an BinaryNode constructor
+		 * 
+		 * @param element
+		 */
+		public BinaryNode(T element) {
+			this.element = element;
+			this.leftChild = null;
+			this.rightChild = null;
+			this.color = Color.RED;
+		}
+
+		/**
+		 * This method converts the node to a string return a string
+		 */
+		public String toString() {
+			return this.toArrayList().toString();
+		}
+
+		/**
+		 * This
+		 * 
+		 * @return
+		 */
+		public ArrayList<T> toArrayList() {
+			ArrayList<T> a = new ArrayList<T>();
+			PreOrderIterator i = new PreOrderIterator(this);
+			BinaryNode temp;
+			while (i.hasNext()) {
+				temp = i.next();
+				a.add(temp.element);
+			}
+			return a;
+		}
+
+		private int height() {
+			int leftHeight = -1;
+			int rightHeight = -1;
+			if (leftChild != null)
+				leftHeight = leftChild.height();
+			if (rightChild != null)
+				rightHeight = rightChild.height();
+			return Math.max(leftHeight, rightHeight) + 1;
+		}
+
+		/**
+		 * This returns the element
+		 * 
+		 * @return T
+		 */
+		public T getElement() {
+			return this.element;
+		}
+
+		/**
+		 * This returns the color of the node
+		 * 
+		 * @return Color
+		 */
+		public Color getColor() {
+			return this.color;
+		}
+
+		private void switchColor() {
+			color = (this.isRed()) ? Color.BLACK : Color.RED;
+		}
+
+		private void setBlack() {
+			color = Color.BLACK;
+		}
+
+		private void insert(T i, MyBoolean b, BinaryNode current, BinaryNode p,
+				BinaryNode gp, BinaryNode ggp) {
+			checkColor(current, p, gp, ggp);
+
+			int comp = i.compareTo(current.element);
+			// when it is the leaf of the tree, to the rightChild
+			if (comp > 0 && current.rightChild == null) {
+				current.rightChild = new BinaryNode(i);
+				// root
+				if (gp == null && p != null && p.equals(root)
+						&& current.color.equals(Color.RED)) {
+					root = balance(current.rightChild, current, p);
+				}
+				// universal
+				else if (gp != null && p != null) {
+					// leftchild of gp
+					if (p.equals(gp.leftChild)) {
+						gp.leftChild = balance(current.rightChild, current, p);
+					} else
+						// rightChild of gp
+						gp.rightChild = balance(current.rightChild, current, p);
+
+				}
+			}
+
+			// when it is the middle of the tree, to the rightChild
+			else if (comp > 0) {
+				insert(i, b, current.rightChild, current, p, gp);
+			}
+			// if the element already exsit in the tree
+			else if (comp == 0) {
+				b.setFalse();
+			}
+			// when it is the leaf, and it is inserting to the leftchild
+			else if (comp < 0 && current.leftChild == null) {
+				current.leftChild = new BinaryNode(i);
+				if (gp == null && p != null && p.equals(root)
+						&& current.color.equals(Color.RED)) {
+					root = balance(current.leftChild, current, p);
+				} else if (gp != null && p != null) {
+					if (p.equals(gp.rightChild)) {
+						gp.rightChild = balance(current.leftChild, current, p);
+					} else
+						gp.leftChild = balance(current.leftChild, current, p);
+
+				}
+			}
+			// when it is in the middle and it is inserting into leftchild
+			else if (comp < 0) {
+				insert(i, b, current.leftChild, current, p, gp);
+			}
+		}
+
+		private void checkColor(BinaryNode current, BinaryNode p,
+				BinaryNode gp, BinaryNode ggp) {
+			if (current.color.equals(Color.BLACK) && current.leftChild != null
+					&& current.rightChild != null
+					&& current.leftChild.color == Color.RED
+					&& current.rightChild.color == Color.RED) {
+				current.flipColor();
+				// uncle is red as well case
+				// sucssisive red nodes that is one node below the root
+				if (ggp == null && gp != null) {
+					root = balance(current, p, gp);
+				}
+				if (ggp != null && ggp.rightChild != null
+						&& ggp.rightChild.equals(gp)) {
+					ggp.rightChild = balance(current, p, gp);
+				}
+				if (ggp != null && ggp.rightChild != null
+						&& ggp.leftChild.equals(gp)) {
+					ggp.leftChild = balance(current, p, gp);
+				}
+			}
+		}
+
+		private void flipColor() {
+			this.switchColor();
+			this.leftChild.switchColor();
+			this.rightChild.switchColor();
+		}
+
+		private boolean isRed() {
+			return (this.color.equals(Color.RED)) ? true : false;
+		}
+
+		private BinaryNode balance(BinaryNode child, BinaryNode current,
+				BinaryNode p) {
+			// single left rotation
+			if (child.color.equals(Color.RED)
+					&& current.color.equals(Color.RED)) {
+				if (child.equals(current.rightChild)) {
+					if (current.equals(p.leftChild)) {
+						p = doubleLeftRotation(current, p);
+						p.switchColor();
+						p.rightChild.switchColor();
+						return p;
+					}
+					p = singleLeftRotation(current, p);
+					p.switchColor();
+					p.leftChild.switchColor();
+					return p;
+				} else {
+					if (current.equals(p.rightChild)) {
+						p = doubleRightRotation(current, p);
+						p.switchColor();
+						p.leftChild.switchColor();
+						return p;
+					}
+					p = singleRightRotation(current, p);
+					p.switchColor();
+					p.rightChild.switchColor();
+					return p;
+				}
+			}
+			return p;
+		}
+
+		private BinaryNode singleRightRotation(BinaryNode c, BinaryNode p) {
+			p.leftChild = c.rightChild;
+			c.rightChild = p;
+			RedBlackTree.this.rotationCount++;
+			return c;
+		}
+
+		private BinaryNode singleLeftRotation(BinaryNode c, BinaryNode p) {
+			p.rightChild = c.leftChild;
+			c.leftChild = p;
+			RedBlackTree.this.rotationCount++;
+			return c;
+		}
+
+		private BinaryNode doubleLeftRotation(BinaryNode current, BinaryNode p) {
+			BinaryNode temp = current.rightChild;
+			current.rightChild = temp.leftChild;
+			temp.leftChild = current;
+			p.leftChild = temp.rightChild;
+			temp.rightChild = p;
+			RedBlackTree.this.rotationCount += 2;
+			RedBlackTree.this.doubleRotationCount++;
+			return temp;
+		}
+
+		private BinaryNode doubleRightRotation(BinaryNode current, BinaryNode p) {
+			BinaryNode temp = current.leftChild;
+			current.leftChild = temp.rightChild;
+			temp.rightChild = current;
+			p.rightChild = temp.leftChild;
+			temp.leftChild = p;
+			RedBlackTree.this.rotationCount += 2;
+			RedBlackTree.this.doubleRotationCount++;
+			return temp;
+		}
+
+		/**
+		 * This returns the leftChild of the node
+		 * 
+		 * @return BinaryNode
+		 */
+		public BinaryNode getLeftChild() {
+			return leftChild;
+		}
+
+		/**
+		 * This returns the rightChild of the node
+		 * 
+		 * @return BinaryNode
+		 */
+		public BinaryNode getRightChild() {
+			return rightChild;
+		}
+
+		private void remove(T i, MyBoolean b, BinaryNode x, BinaryNode p,BinaryNode gp) {
+			if (root == null) {
+				b.setFalse();
+				return;
+			}
+
+			int comp = i.compareTo(x.element);
+			if (!x.hasChildren() && comp != 0) {
+				b.setFalse();
+				return;
+			}
+			if (!root.hasChildren() && comp == 0) {
+				root = null;
+				return;
+			}
+			// case both children are red
+			if ((root.hasLeftChild() && root.leftChild.isRed())|| (root.hasRightChild() && root.rightChild.isRed())) {
+				stepTwoB(i, b, x, p);
+			} 
+			else {
+				root.switchColor();
+				if (comp > 0) {
+					stepTwo(i, b, x.rightChild, x, p);
+				} else if (comp == 0) {
+					stepThree(b, x, p);
+				} else {
+					stepTwo(i, b, x.leftChild, x, p);
+				}
+			}
+		}
+
+		private void stepTwo(T i,MyBoolean b, BinaryNode x, BinaryNode p, BinaryNode gp) {
+			// int comp=i.compareTo(x.element);
+			if ((x.hasLeftChild() && x.leftChild.isRed())
+					|| (x.hasRightChild() && x.rightChild.isRed())) {
+				//stepTwoB(i, b, p, x);
+				stepTwoB(i, b, x, p);
+			} else {
+				MyBoolean temp = new MyBoolean(x.isLeftChild(p));
+				if (temp.getValue()) {
+					stepTwoA(i, b, x, p, gp, p.rightChild, temp);
+				} else {
+					stepTwoA(i, b, x, p, gp, p.leftChild, temp);
+				}
+			}
+		}
+
+		private void stepTwoA(T i, MyBoolean b, BinaryNode x, BinaryNode p, BinaryNode gp, 
+				BinaryNode t, MyBoolean isLeftSide) {
+			// left side
+//			if(t==null){
+//				stepTwo(i, b, x, p, gp);
+//			}
+			if (t.hasRightChild() && t.rightChild.isRed()&& isLeftSide.getValue()) {
+				stepTwoA3(i, b, x, p, gp, isLeftSide);
+			} else if (t.hasLeftChild() && t.leftChild.isRed()&& isLeftSide.getValue()) {
+				stepTwoA2(i, b, x, p, gp, isLeftSide);
+			} else if (isLeftSide.getValue()) {
+				//stepTwoA1(i, x, p, b);
+				stepTwoA1(i, b, x, p);
+			}
+			// right side
+			else if (t.hasLeftChild() && t.leftChild.isRed()
+					&& !isLeftSide.getValue()) {
+				//stepTwoA3(i, x, p, gp, b, isLeftSide);
+				stepTwoA3(i, b, x, p, gp, isLeftSide);
+			} else if (t.hasRightChild() && t.rightChild.isRed()
+					&& !isLeftSide.getValue()) {
+				//stepTwoA2(i, x, p, gp, b, isLeftSide);
+				stepTwoA2(i, b, x, p, gp, isLeftSide);
+			} else if (!isLeftSide.getValue()) {
+				//stepTwoA1(i, x, p, b);
+				stepTwoA1(i, b, x, p);
+			}
+		}
+
+		private void stepTwoA1(T i, MyBoolean b, BinaryNode x, BinaryNode p) {
+			p.flipColor();
+			// if x is the node
+			int comp = i.compareTo(x.element);
+			
+			if (comp != 0 && !x.hasChildren()) {
+				b.setFalse();
+			} else if (comp == 0) {
+				stepThree(b, x, p);
+			}
+			// if x is not the node then go to step two
+			else if (comp < 0) {
+			//	stepTwo(i, x.leftChild, x, p, b);
+				stepTwo(i, b, x.leftChild, x, p);
+			} else if (comp > 0) {
+				//stepTwo(i, x.rightChild, x, p, b);
+				stepTwo(i, b, x.rightChild, x, p);
+			}
+		}
+
+		private void stepTwoA2(T i,MyBoolean b, BinaryNode x, BinaryNode p, BinaryNode gp, MyBoolean isLeftSide) {
+			int comp = x.element.compareTo(i);
+			if (comp != 0 && !x.hasChildren()) {
+				b.setFalse();
+				return;
+			} else if (isLeftSide.getValue()) {
+				BinaryNode temp = doubleRightRotation(p.rightChild, p);
+				p.switchColor();
+				x.switchColor();
+				if(gp==null){
+					root=temp;
+				}
+				else{
+					if(p.isLeftChild(gp)){
+						gp.leftChild = temp;
+						}
+						else{
+							gp.rightChild=temp;
+						}
+				}
+				if (comp != 0) {
+					stepTwo(i, b, x, p, temp);
+					return;
+				}
+			} else if (!isLeftSide.getValue()) {
+				BinaryNode temp = doubleLeftRotation(p.leftChild, p);
+				p.switchColor();
+				x.switchColor();
+				if(gp==null){
+					root=temp;
+				}
+				else{
+					if(p.isLeftChild(gp)){
+						gp.leftChild = temp;
+						}
+						else{
+							gp.rightChild=temp;
+						}
+				}
+				if (comp != 0) {
+					//stepTwo(i, x, p, temp, b);
+					stepTwo(i, b, x, p, temp);
+					return;
+				}
+			}
+			if (comp == 0) {
+				stepThree(b, x, p);
+				return;
+			}
+		}
+
+		private void stepTwoA3(T i,MyBoolean b, BinaryNode x, BinaryNode p, BinaryNode gp, MyBoolean isLeftSide) {
+			int comp = x.element.compareTo(i);
+			if(comp!=0&&!x.hasChildren()){b.setFalse();return;}
+
+			// else
+			if (x.isLeftChild(p)) {
+				BinaryNode temp = singleLeftRotation(p.rightChild, p);
+				x.switchColor();
+				p.switchColor();
+				temp.switchColor();
+				temp.rightChild.switchColor();
+				if(gp==null){
+					root=temp;
+				}
+				else{
+					if(p.isLeftChild(gp)){
+					gp.leftChild = temp;
+					}
+					else{
+						gp.rightChild=temp;
+					}
+					}
+				if (comp > 0) {
+					//stepTwo(i, x, p, temp, b);
+					stepTwo(i, b, x.rightChild, x, p);
+					return;
+				}
+				else if(comp<0){
+						stepTwo(i, b, x.leftChild, x, p);
+				}
+			} else if (!x.isLeftChild(p)) {
+				BinaryNode temp = singleRightRotation(p.leftChild, p);
+				x.switchColor();
+				p.switchColor();
+				temp.switchColor();
+				temp.leftChild.switchColor();
+				if(gp==null){
+					root=temp;
+				}
+				else{
+					if(p.isLeftChild(gp)){
+						gp.leftChild = temp;
+						}
+						else{
+							gp.rightChild=temp;
+						}
+					
+				}
+				if (comp != 0) {
+					stepTwo(i, b, x, p,temp);
+					return;
+				}
+			}
+
+			if (comp == 0) {
+				stepThree(b, x, p);
+				return;
+			}
+
+		}
+
+		private void stepTwoB(T i, MyBoolean b, BinaryNode x, BinaryNode p) {
+			int comp = i.compareTo(x.element);
+
+			 if(comp!=0&&!x.hasChildren()){b.setFalse();return;}
+
+			// else
+			if (comp == 0) {
+				stepThree(b, x, p);
+			}
+
+			else if (comp > 0 && x.hasRightChild() && x.rightChild.isRed()) {
+				stepTwoB1(i, b, x.rightChild, x, p);
+			} else if (comp > 0 && x.hasRightChild() && !x.rightChild.isRed()) {
+				stepTwoB2(i, b, x.rightChild, x, p);
+			} else if (comp < 0 && x.hasLeftChild() && x.leftChild.isRed()) {
+				stepTwoB1(i, b, x.leftChild, x, p);
+			} else if (comp < 0 && x.hasLeftChild() && !x.leftChild.isRed()) {
+				stepTwoB2(i, b, x.leftChild, x, p);
+			}
+		}
+
+		private void stepTwoB1(T i,MyBoolean b, BinaryNode x, BinaryNode p, BinaryNode gp
+				) {
+			
+			int comp = i.compareTo(x.element);
+			if (comp != 0 && !x.hasChildren()) {
+				b.setFalse();
+				return;
+			} else if (comp == 0) {
+				stepThree(b, x, p);
+			} else if (comp > 0 && x.hasRightChild()) {
+				stepTwo(i, b, x.rightChild, x, p);
+			} else if (comp < 0 && x.hasLeftChild()) {
+				stepTwo(i, b, x.leftChild,x, p);
+			}
+
+		}
+
+		private void stepTwoB2(T i,MyBoolean b, BinaryNode x, BinaryNode p, BinaryNode gp) {
+//			 if(i.compareTo(x.element)!=0&&!x.hasChildren()){b.setFalse();return;}
+			 
+			if (p != null && x.isLeftChild(p)) {
+				BinaryNode temp = singleLeftRotation(p.rightChild, p);
+				temp.leftChild=p;
+				temp.switchColor();
+				p.switchColor();
+				if (p.equals(root)) {
+					root = temp;
+				} 
+				else {
+					if(p.isLeftChild(gp)){
+						gp.leftChild = temp;
+						}
+						else{
+							gp.rightChild=temp;
+						}
+				}
+				
+				stepTwo(i, b, x, p,temp);
+			} else if (p != null && !x.isLeftChild(p)) {
+				BinaryNode temp = singleRightRotation(p.leftChild, p);
+				temp.switchColor();
+				p.switchColor();
+				if (p.equals(root)) {
+					root = temp;
+				} 
+				else {
+					if(p.isLeftChild(gp)){
+						gp.leftChild = temp;
+						}
+						else{
+							gp.rightChild=temp;
+						}
+				}
+				stepTwo(i, b, x, p,temp);
+			}
+		}
+
+		private void stepThree(MyBoolean b, BinaryNode x, BinaryNode p) {
+			if (x.leftChild != null && x.rightChild != null) {
+				T temp = x.leftChild.findMaxNode().element;
+				if (x.isRed()) {
+					x.element = temp;
+					stepTwo(temp, b, x.leftChild,x, p);
+				} else {
+					stepTwoB(temp, b, x, p);
+					// This could cause a bug because it is just simply
+					// replacing the value of x rather than replace the node
+					x.element = temp;
+				}
+			}
+			// If X is a leaf, it must be red and can be safely deleted. Do
+			// so and go to step 4.
+
+			else if (x.leftChild == null && x.rightChild == null) {
+				if (x.equals(root)) {
+					root = null;
+				}
+				if (x.equals(p.leftChild)) {
+					p.leftChild = null;
+				}
+				if (x.equals(p.rightChild)) {
+					p.rightChild = null;
+				}
+			}
+
+			// If X has a single child, then X may be red or black. It is
+			// black only in case 2B. In this case, X has exactly one red
+			// child. Color that child black and remove X. Then go to
+			// step 4.
+			else if (x.leftChild == null && x.rightChild != null) {
+				x.element = x.rightChild.element;
+				x.leftChild = x.rightChild.leftChild;
+				x.rightChild = x.rightChild.rightChild;
+//				if(x.color.equals(Color.RED)){
+//					x.switchColor();
+//				}
+			} else if (x.rightChild == null && x.leftChild != null) {
+				x.element = x.leftChild.element;
+				x.rightChild = x.leftChild.rightChild;
+				x.leftChild = x.leftChild.leftChild;
+//				if(x.color.equals(Color.RED)){
+//					x.switchColor();
+//				}
+			}
+
+		}
+
+		private boolean hasChildren() {
+			return (this.hasLeftChild() || this.hasRightChild()) ? true : false;
+		}
+
+		private boolean hasLeftChild() {
+			return (this.leftChild != null) ? true : false;
+		}
+
+		private boolean hasRightChild() {
+			return (this.rightChild != null) ? true : false;
+		}
+
+		private BinaryNode findMaxNode() {
+			BinaryNode temp = this;
+			while (temp.rightChild != null) {
+				temp = this.rightChild;
+			}
+			return temp;
+		}
+
+		private boolean isLeftChild(BinaryNode p) {
+			return (this.equals(p.leftChild)) ? true : false;
+		}
+	}
+
+	// ---------------------------------------------------------------
+	private class MyBoolean {
+		private boolean myboolean;
+
+		public MyBoolean() {
+			this.myboolean = true;
+		}
+
+		public MyBoolean(boolean b) {
+			this.myboolean = b;
+		}
+
+		public void setFalse() {
+			this.myboolean = false;
+		}
+
+		public boolean getValue() {
+			return this.myboolean;
+		}
+	}
+
+	// ---------------------------------------------------------------------------
+	private class PreOrderIterator implements Iterator<RedBlackTree.BinaryNode> {
+		private Stack<BinaryNode> stack;
+		private BinaryNode current;
+		private int localCounter;
+
+		public PreOrderIterator(BinaryNode root) {
+			this.stack = new Stack<BinaryNode>();
+			this.current = root;
+			this.localCounter = globalCounter;
+			if (root != null) {
+				stack.push(root);
+			}
+		}
+
+		@Override
+		public boolean hasNext() {
+			if (current == null) {
+				return false;
+			}
+			return !stack.isEmpty();
+		}
+
+		@Override
+		public BinaryNode next() {
+			if (globalCounter != localCounter) {
+				throw new ConcurrentModificationException();
+			}
+			if (!this.hasNext()) {
+				throw new NoSuchElementException();
+			}
+			current = stack.pop();
+			if (current.rightChild != null) {
+				stack.push(current.rightChild);
+			}
+			if (current.leftChild != null) {
+				stack.push(current.leftChild);
+			}
+			return current;
+		}
+	}
+}
