@@ -1,0 +1,75 @@
+body {
+  background-color: #777;
+  color: #fff;
+}
+
+.panel {
+  background-color: #999;
+  color: #fff;
+}
+.container-fluid {
+  background-color: #bbb;
+  color: #fff;
+}
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.axis,
+.frame {
+  shape-rendering: crispEdges;
+}
+
+.axis line {
+  stroke: #ddd;
+}
+
+#ScatterMatrix .axis path {
+  display: none;
+}
+
+.frame {
+  fill: none;
+  stroke: #aaa;
+}
+
+#ScatterMatrix circle {
+  fill-opacity: 0.7;
+}
+
+circle.hidden {
+  fill: #ccc !important;
+}
+
+circle:active {
+  fill-opacity: 1;
+}
+
+
+.extent {
+  fill: #fff;
+  fill-opacity: .125;
+  stroke: #fff;
+}
+
+.tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+  width:300px!important;
+  max-height:150px!important;
+  overflow-y:scroll
+}
+
+/* Style northward tooltips differently */
+.tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
