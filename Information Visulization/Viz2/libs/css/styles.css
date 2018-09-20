@@ -1,14 +1,14 @@
 body {
-  background-color: #777;
+  background-color: #111;
   color: #fff;
 }
 
 .panel {
-  background-color: #999;
+  /*background-color: #999;*/
   color: #fff;
 }
 .container-fluid {
-  background-color: #bbb;
+  /*background-color: #bbb;*/
   color: #fff;
 }
 
