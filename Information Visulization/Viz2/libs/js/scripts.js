@@ -51,6 +51,37 @@ var scatters = function(data, id) {
             .range([0, 1])
             .domain(d3.extent(data, (d)=>(d.c))).nice();
 
+  
+
+      var brush = d3.brush()
+        .on("start", brushstart)
+        .on("brush", brushmove);
+
+      function brushstart(){
+               s = d3.event.selection;
+          d3.selectAll("circle").style("opacity", 1);
+      }
+      // function brushstart(){console.log("helow")};
+      function brushmove(){
+        s = d3.event.selection;
+          d3.selectAll("circle").style("opacity", 1);
+        if(s){
+        
+          d3.selectAll("#"+id + " circle")
+          .filter(
+            function(d) { return !(this.getAttribute("cx")>=s[0][0] && this.getAttribute("cx")<=s[1][0] && this.getAttribute("cy")>=s[0][1] && this.getAttribute("cy")<=s[1][1]); 
+            })
+          .each(function(d){
+            d3.selectAll("circle").filter(
+              function(dd) {return dd.Country==d.Country;})
+              .style("opacity", 0.1);
+        })}
+      };
+
+    svg.append("g")
+      .attr("class", "brush")
+      .call(brush);
+
       svg.append("g")
           .attr("class", "x axis")
           .attr("transform", "translate(0," + height + ")")
@@ -87,11 +118,6 @@ var scatters = function(data, id) {
             tip.style('display', 'none');
           });
 
-
-      let getScale = function(d){
-
-      }
-
       svg.selectAll("#"+id+" .dot")
         .data(data)
       .enter().append("circle")
@@ -100,17 +126,14 @@ var scatters = function(data, id) {
         .attr("cx", function(d) { return x(d.x); })
         .attr("cy", function(d) { return y(d.y); })
         .attr("Country", (d)=>(d.Country))
-        .attr("scale", keys.rScale/100)
+        .attr("zoom", function(d) {return keys.rScale/100.0 * r(d.r) + 10;})
+        .attr("norm", function(d) {return keys.rScale/100.0 * r(d.r);})
         .on('mouseover', function(d, i) {
-
-          // d3.selectAll("circle").transition()
-          //     .style("opacity", (dd) => (dd.Country==d.Country ? 1 : 0.2))
-          //     .attr("r", (dd) => (dd.Country==d.Country ? keys.rScale/100.0 * r(dd.r) + 10 : keys.rScale/100.0 * r(dd.r)));
           d3.selectAll("circle")
             .each(function(dd){
               d3.select(this).transition().duration(200)
                 .style("opacity", dd.Country==d.Country ? 1 : 0.2)
-                .attr("r", (dd.Country==d.Country ? 10 : 0)+this.getAttribute("scale") * r(dd.r));
+                .attr("r", dd.Country==d.Country ? this.getAttribute("zoom") : this.getAttribute("norm"));
             });
           tip.transition().duration(100);
           tip.style('top',  d3.event.pageY +'px');
@@ -120,13 +143,12 @@ var scatters = function(data, id) {
         })
         .on('mouseout', function(d, i) {
           d3.selectAll("circle")
-            
             .each(function(dd){
               d3.select(this).transition().duration(100)
                 .style("opacity", 1)
-                .attr("r", this.getAttribute("scale")* r(dd.r));
+                .attr("r", this.getAttribute("norm"));
             });
-          tip.transition().duration(100).delay(500)
+          tip.transition().duration(100).delay(400)
           .style('display', 'none');
         })
         .style("fill", function(d) { return d3.interpolateRdBu(1-c(d.c)); });
@@ -142,11 +164,12 @@ var scatters = function(data, id) {
     if((key == "xScale") || (key == "yScale")) continue;
     $("."+id+ " #"+key).val(keys[key]);
   }
-
+ $("."+id + " .chartname").text(keys.x+" VS "+keys.y);
 	drawDots();
 
   let updateField = function(type, value){
     d3.selectAll("#" + id + " > *").remove();
+
     if(type == "xScale" || type == "yScale"){
       if(value == "Linear") value = d3.scaleLinear;
       else value = d3.scaleLog;
@@ -155,6 +178,7 @@ var scatters = function(data, id) {
       $("."+id+" span").text(d3.format(".2n")(value/100));
     }
     keys[type] = value;
+    $("."+id + " .chartname").text(keys.x+" VS "+keys.y);
     drawDots();
   };
 
