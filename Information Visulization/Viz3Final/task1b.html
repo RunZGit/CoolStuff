@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.node {
+  stroke: #fff;
+  stroke-width: 1px;
+}
+
+.link {
+  stroke: #999;
+  stroke-width: 0.3px;
+}
+
+
+
+</style>
+<body></body>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script>
+
+d3.json("/Data/UsAir97.json").then(function(graph) {
+  var width = 1500,
+      height = 1000;
+
+  var svg = d3.select("body").append("svg")
+      .attr("width", width)
+      .attr("height", height);
+      
+  graph.links.forEach(function(d) {
+    d.source = graph.nodes[d.source-1];
+    d.target = graph.nodes[d.target-1];
+  });
+
+  console.log(graph.links);
+  var x = d3.scaleLinear()
+            .range([0, width])
+            .domain(d3.extent(graph.nodes, (d)=>(d.x))).nice(),
+      y = d3.scaleLinear()
+            .range([height, 0])
+            .domain(d3.extent(graph.nodes, (d)=>(d.y))).nice();
+
+  var link = svg.append("g")
+      .attr("class", "link")
+    .selectAll("line")
+    .data(graph.links)
+    .enter().append("line")
+      .attr("x1", function(d) { return x(d.source.x); })
+      .attr("y1", function(d) { return y(d.source.y); })
+      .attr("x2", function(d) { return x(d.target.x); })
+      .attr("y2", function(d) { return y(d.target.y); });
+
+  var node = svg.append("g")
+      .attr("class", "node")
+    .selectAll("circle")
+    .data(graph.nodes)
+    .enter().append("circle")
+      .attr("r", 4)
+      .attr("cx", function(d) { return x(d.x); })
+      .attr("cy", function(d) { return y(d.y); });
+});
+
+</script>

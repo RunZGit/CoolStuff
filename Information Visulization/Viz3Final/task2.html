@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+	body {
+		font: 12px sans-serif;
+	}
+
+	/* For centering */
+	svg {
+		margin: 0 auto;
+		display: inherit;
+	}
+
+	.states path {
+		stroke-width: 1px;
+		stroke: black;
+		fill: #DBDBDB;
+		
+	}
+/*	.states path:hover, path.highlighted {
+		fill: tomato;
+	}
+*/
+	.arcs path {
+	  stroke-width: 0.3px;
+	  stroke: tomato;
+	  fill: none;
+	}
+
+	.node {
+	  stroke: white;
+	  stroke-width: 1.5px;
+	}
+
+
+</style>
+<body>
+	<script src="http://d3js.org/d3.v4.min.js"></script>
+	<script src="http://d3js.org/topojson.v1.min.js"></script>
+	<script src="./libs/js/data.js"></script>
+	<script>
+
+	// This is an array of source/target pairs.
+	// Each location array is in the order of longitude and then latitude.
+	// You often see these as lat/lng but since we need this to be in math format we do them in lng/lat, which is x/y.
+	// You could also nest this data and change what object you bind your data to save space. There's no single correct way.
+	// Do what is best for your data and for your deadlines.
+	
+
+	// console.log(arcdata);
+	// Map dimensions (in pixels)
+	var width = 2000,
+			height = 1200;
+
+	// Map projection
+	var projection = d3.geoAlbersUsa()
+			.scale(2000)
+			.translate([width/2,height/2]) //translate to center the map in view
+
+	// Generate paths based on projection
+	var path = d3.geoPath()
+			.projection(projection);
+
+	// Create an SVG
+	var svg = d3.select("body").append("svg")
+			.attr("width", width)
+			.attr("height", height);
+
+	// Group for the states
+	// SVG drawing order is based strictly on the order in the DOM
+	// So you can't use something like z-index to make an element appear above or below another object
+	// We have to draw the states group first so that it appears below the arcs
+	// Change the order of these two variables if you want to see how it would look incorrect.
+	var states = svg.append("g")
+			.attr("class","states");
+
+	// Group for the arcs
+	var arcs = svg.append("g")
+			.attr("class","arcs");
+
+	var color = d3.scaleOrdinal(myColorScale);
+
+	// var r = d3.scaleLinear()
+ //            .range([3.5, 20])
+ //            .domain(d3.extent(airports, (d)=>(d.weight))).nice()
+
+ //    var w = d3.scaleLinear()
+ //            .range([0.01, 1])
+ //            .domain(d3.extent(arcdata, (d)=>(d.weight))).nice()
+	// Keeps track of currently zoomed feature
+	var centered;
+
+	// Load the basemap data
+	d3.json("us-states.topojson",function(error,geodata) {
+		if (error) return console.log(error); //unknown error, check the console
+
+		//Create a path for each map feature in the data
+		states.selectAll("path")
+			.data(topojson.feature(geodata,geodata.objects.states).features) //generate features from TopoJSON
+			.enter()
+			.append("path")
+			.attr("d",path);
+
+		// Create a path for each source/target pair.
+		arcs.selectAll("path")
+			.data(arcdata)
+			.enter()
+			.append("path")
+			// .attr('stroke-width', (d)=>(w(d.weight)))
+			.attr('d', function(d) { 
+				return lngLatToArc(d, 'sourceLocation', 'targetLocation', 2); // A bend of 5 looks nice and subtle, but this will depend on the length of your arcs and the visual look your visualization requires. Higher number equals less bend.
+			});
+
+		var node = svg.append("g")
+	      .attr("class", "node")
+		  .selectAll("circle")
+		  .data(airports)
+		  	.enter().append("circle")
+		  	.attr("r", 4)
+		  	.attr("weight", (d)=>(d.weight))
+		  	.attr("fill", function(d){return color(d.state)})
+		    .attr("cx", function(d) {return getProjected([d.lon, d.lat], 0)})
+		    .attr("cy", function(d) {return getProjected([d.lon, d.lat], 1)});
+
+	});
+
+	function getProjected(coord, islon){
+		result = projection(coord);
+		return !result ? 0 : result[islon];
+	}
+
+	// This function takes an object, the key names where it will find an array of lng/lat pairs, e.g. `[-74, 40]`
+	// And a bend parameter for how much bend you want in your arcs, the higher the number, the less bend.
+	function lngLatToArc(d, sourceName, targetName, bend){
+		// If no bend is supplied, then do the plain square root
+		bend = bend || 1;
+		// `d[sourceName]` and `d[targetname]` are arrays of `[lng, lat]`
+		// Note, people often put these in lat then lng, but mathematically we want x then y which is `lng,lat`
+
+		var sourceLngLat = d[sourceName],
+				targetLngLat = d[targetName];
+
+		if (targetLngLat && sourceLngLat) {
+			var sourceXY = projection( sourceLngLat ),
+					targetXY = projection( targetLngLat );
+
+			// Uncomment this for testing, useful to see if you have any null lng/lat values
+			if (!targetXY) {return "M0,0,l0,0z";}
+			
+			var sourceX = sourceXY[0],
+					sourceY = sourceXY[1];
+
+			var targetX = targetXY[0],
+					targetY = targetXY[1];
+
+			var dx = targetX - sourceX,
+					dy = targetY - sourceY,
+					dr = Math.sqrt(dx * dx + dy * dy)*bend;
+
+			// To avoid a whirlpool effect, make the bend direction consistent regardless of whether the source is east or west of the target
+			var west_of_source = (targetX - sourceX) < 0;
+			if (west_of_source) return "M" + targetX + "," + targetY + "A" + dr + "," + dr + " 0 0,1 " + sourceX + "," + sourceY;
+			return "M" + sourceX + "," + sourceY + "A" + dr + "," + dr + " 0 0,1 " + targetX + "," + targetY;
+			
+		} else {
+			return "M0,0,l0,0z";
+		}
+	}
+
+</script>
+</body>
+</html>

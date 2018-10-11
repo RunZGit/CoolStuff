@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<!-- Your visualization must include a legend showing the meaning of node sizes (importance factor), edge width and color (frequency). -->
+<body>
+	<div class="container-fluid" style="text-align:center" style="display:block margin: auto">
+	<div class="row">
+
+		<div class="col-xlg-3 col-lg-3 col-md-6 col-sm-6">
+			<input type="range" class="custom-range" min="9" max="9600" value="9" id="nodeWeight">
+			<label for="nodeWeight">Minimum Airport Importance scale : <span id="nw">0.009</span></label>
+		</div>
+		<div class="col-xlg-1 col-lg-1 col-md-6 col-sm-6">
+				<svg  width="30" height="30"><circle id="nodeScale" r="4" fill="lightblue" cx="15" cy="15"></circle></svg>
+		</div>
+		<div class="col-xlg-3 col-lg-3 col-md-6 col-sm-6">
+			<input type="range" class="custom-range" min="9" max="408"  value="9" id="edgeWeight">
+			<label for="edgeWeight">Minimum Flight Importance scale : <span id="ew">0.009</span></label>
+		</div>
+		<div class="col-xlg-1 col-lg-1 col-md-6 col-sm-6">
+				<svg width="80" height="30" style="margin-top: 10" ><rect id="edgeScale"  x="0" y="0" width="80" height="3.1" fill="white"></rect></svg>
+		</div>
+		<div class="col-xlg-12 col-lg-12 col-md-12 col-sm-12">
+		    	<svg id="map"></svg>
+		</div>
+	</div>
+	</div>
+</body>
+	<script src="http://d3js.org/d3.v4.min.js"></script>
+	<script src="http://d3js.org/topojson.v1.min.js"></script>
+	<script src="./libs/js/data.js"></script>
+	<script src="//d3js.org/d3-scale-chromatic.v0.3.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.13.0/d3-legend.js"></script>
+	<script>
+
+
+	// This is an array of source/target pairs.
+	// Each location array is in the order of longitude and then latitude.
+	// You often see these as lat/lng but since we need this to be in math format we do them in lng/lat, which is x/y.
+	// You could also nest this data and change what object you bind your data to save space. There's no single correct way.
+	// Do what is best for your data and for your deadlines.
+	
+
+	// console.log(arcdata);
+	// Map dimensions (in pixels)
+
+	// Load the basemap data
+	d3.json("us-states.topojson",function(error,geodata) {
+		if (error) return console.log(error); //unknown error, check the console
+
+		var width = 2000,
+		height = 1500;
+
+		// Map projection
+		var projection = d3.geoAlbersUsa()
+				.scale(2000)
+				.translate([width/2-165,height/2-200]) //translate to center the map in view
+
+		// Generate paths based on projection
+		var path = d3.geoPath()
+				.projection(projection);
+
+		// Create an SVG
+		var svg = d3.select("#map")
+				.attr("width", width)
+				.attr("height", height);
+
+		function getProjected(coord, islon){
+			result = projection(coord);
+			return !result ? 0 : result[islon];
+		}
+
+		// This function takes an object, the key names where it will find an array of lng/lat pairs, e.g. `[-74, 40]`
+		// And a bend parameter for how much bend you want in your arcs, the higher the number, the less bend.
+		function lngLatToArc(d, sourceName, targetName, bend){
+			// If no bend is supplied, then do the plain square root
+			bend = bend || 1;
+			// `d[sourceName]` and `d[targetname]` are arrays of `[lng, lat]`
+			// Note, people often put these in lat then lng, but mathematically we want x then y which is `lng,lat`
+
+			var sourceLngLat = d[sourceName],
+					targetLngLat = d[targetName];
+
+			if (targetLngLat && sourceLngLat) {
+				var sourceXY = projection( sourceLngLat ),
+						targetXY = projection( targetLngLat );
+
+				// Uncomment this for testing, useful to see if you have any null lng/lat values
+				if (!targetXY || !sourceXY) {return "M-10,-10,l-10,-10z";}
+				
+				var sourceX = sourceXY[0],
+						sourceY = sourceXY[1];
+
+				var targetX = targetXY[0],
+						targetY = targetXY[1];
+
+				var dx = targetX - sourceX,
+						dy = targetY - sourceY,
+						dr = Math.sqrt(dx * dx + dy * dy)*bend;
+
+				// To avoid a whirlpool effect, make the bend direction consistent regardless of whether the source is east or west of the target
+				var west_of_source = (targetX - sourceX) < 0;
+				if (west_of_source) return "M" + targetX + "," + targetY + "A" + dr + "," + dr + " 0 0,1 " + sourceX + "," + sourceY;
+				return "M" + sourceX + "," + sourceY + "A" + dr + "," + dr + " 0 0,1 " + targetX + "," + targetY;
+				
+			} else {
+				return "M0,0,l0,0z";
+			}
+		}
+
+
+		var buildDetails = function(d, isNode){
+		  nodeArray = ["name", "city", "state",  "weight", "count"];
+		  edgeArray = ["source", "target", "weight"]
+
+		  myArray = isNode ? nodeArray : edgeArray;
+	      html = "";
+	      for (idx in myArray){
+	      	myIdx = myArray[idx]
+	        toappend = parseFloat(d[myIdx]) ? d[myIdx].toPrecision(3) :  d[myIdx]
+	        html+= "<p><strong>"+myIdx+":</strong><span style='color:red'> "+toappend+"</span></p>"
+	      }
+	      return html;
+	  	};
+
+  		var tip = d3.select('body')
+          .append('div')
+          .attr('class', 'tip')
+          .style('position', 'absolute')
+          .style('display', 'none')
+          .on('mouseover', function(d, i) {
+            tip.transition().duration(0);
+          })
+          .on('mouseout', function(d, i) {
+            tip.style('display', 'none');
+          });
+
+		// Group for the states
+		// SVG drawing order is based strictly on the order in the DOM
+		// So you can't use something like z-index to make an element appear above or below another object
+		// We have to draw the states group first so that it appears below the arcs
+		// Change the order of these two variables if you want to see how it would look incorrect.
+		var states = svg.append("g")
+				.attr("class","states");
+
+		// Group for the arcs
+		var arcs = svg.append("g")
+				.attr("class","arcs");
+
+		var nodes = svg.append("g")
+		      .attr("class", "node");
+
+		var color = d3.scaleOrdinal(myColorScale);
+
+		var r = d3.scaleLinear()
+	            .range([4, 15])
+	            .domain(d3.extent(airports, (d)=>(d.weight))).nice()
+
+	    var w = d3.scaleLinear()
+	            .range([0.1, 1])
+	            .domain(d3.extent(arcdata, (d)=>(d.weight))).nice()
+
+	    var c2 = d3.scaleSequential(d3.interpolateReds)
+	            .domain(d3.extent(arcdata, (d)=>(d.weight))).nice()
+		//Create a path for each map feature in the data
+		states.selectAll("path")
+			.data(topojson.feature(geodata,geodata.objects.states).features) //generate features from TopoJSON
+			.enter()
+			.append("path")
+			.attr("d",path);
+
+
+		airportMap = {};
+		for(idx in airports){
+			airportMap[airports[idx].name] = airports[idx];
+		}
+
+		var redraw = function(node_thresh, edge_thresh){
+			// Create a path for each source/target pair.
+			arcs.selectAll("path").remove();
+			nodes.selectAll("circle").remove();
+
+			filteredEdges = []
+			filteredNodes = new Set();
+			for(idx in arcdata){
+				cur = arcdata[idx];
+				if(cur.weight>=edge_thresh &&
+					airportMap[cur.source]!=null&&
+					airportMap[cur.target]!=null &&
+				 	airportMap[cur.source].weight>=node_thresh &&
+				  	airportMap[cur.target].weight>=node_thresh){
+					filteredEdges.push(cur);
+					filteredNodes.add(airportMap[cur.source]);
+					filteredNodes.add(airportMap[cur.target]);
+				}
+			}
+			filteredNodes = Array.from(filteredNodes)
+
+			arcs.selectAll("path")
+				.data(filteredEdges)
+				.enter()
+				.append("path")
+				.attr('stroke', (d)=>(c2(d.weight)))
+				.attr('stroke-width', (d)=>(w(d.weight)))
+				.attr('opacity', (d)=>(d.weight<edge_thresh ? 0 : 1))
+				.attr('d', function(d) { 
+					return lngLatToArc(d, 'sourceLocation', 'targetLocation', 2); // A bend of 5 looks nice and subtle, but this will depend on the length of your arcs and the visual look your visualization requires. Higher number equals less bend.
+				})
+				.on('mouseover', function(d, i) {
+				  if(d.weight < edge_thresh) return;
+		          tip.transition().duration(100);
+		          tip.style('top',  d3.event.pageY +'px');
+		          tip.style('left',  d3.event.pageX +'px');
+		          tip.style('display', 'block');
+		          tip.html(buildDetails(d, false));
+		        })
+		        .on('mouseout', function(d, i) {
+		          if(d.weight < edge_thresh) return;
+		          tip.transition().duration(100).delay(400)
+		          .style('display', 'none');
+		        });
+
+			nodes.selectAll("node")
+			  .data(filteredNodes)
+			  	.enter().append("circle")
+			  	.attr("r", (d)=>r(d.weight))
+			  	.attr("weight", (d)=>(d.weight))
+			  	.attr("state", (d)=>(d.state))
+			  	.attr("fill", function(d){return color(d.state)})
+			    .attr("cx", function(d) {return getProjected([d.lon, d.lat], 0)})
+			    .attr("cy", function(d) {return getProjected([d.lon, d.lat], 1)})
+			   .on('mouseover', function(d, i) {
+		          tip.transition().duration(100);
+		          tip.style('top',  d3.event.pageY +'px');
+		          tip.style('left',  d3.event.pageX +'px');
+		          tip.style('display', 'block');
+		          tip.html(buildDetails(d, true));
+		        })
+		        .on('mouseout', function(d, i) {
+		          tip.transition().duration(100).delay(400)
+		          .style('display', 'none');
+		        });
+		        
+
+
+		}
+		
+		redraw(0.009, 0.009);
+
+		var legendOrdinal = d3.legendColor()
+		  .shape("path", d3.symbol().type(d3.symbolCircle).size(150)())
+		  .shapePadding(10)
+
+		  .scale(color);
+
+		svg.append("g")
+		  .attr("class", "legendOrdinal")
+		  .attr("transform", "translate(1800,30)")
+		  .call(legendOrdinal);
+
+
+		d3.select('#nodeWeight').on('change', function() {
+			node_thresh = d3.select('#nodeWeight').property('value');
+			edge_thresh =d3.select('#edgeWeight').property('value');
+			$("#nw").text(d3.format(".5n")(node_thresh/1000));
+			$("#ew").text(d3.format(".5n")(edge_thresh/1000));
+			$("#nodeScale").attr("r", r(node_thresh/1000));
+			redraw(node_thresh/1000, edge_thresh/1000);
+			// redraw(d3.select('#nodeWeight').property('value'), d3.select('#edgeWeight').property('value'));
+		});
+
+		d3.select('#edgeWeight').on('change', function() {
+			node_thresh = d3.select('#nodeWeight').property('value');
+			edge_thresh =d3.select('#edgeWeight').property('value');
+			$("#nw").text(d3.format(".5n")(node_thresh/1000));
+			$("#ew").text(d3.format(".5n")(edge_thresh/1000));
+			$("#edgeScale").attr("height", w(edge_thresh/1000)*10);
+			$("#edgeScale").attr("fill", c2(edge_thresh/1000));
+			redraw(node_thresh/1000, edge_thresh/1000);
+		});
+
+
+	});
+
+	
+
+</script>
+<style>
+	body {
+		background: #555;
+	  	color: #fff;
+	}
+
+	/* For centering */
+	svg {
+		margin: 0 auto;
+		display: inherit;
+	}
+
+	.states path {
+		stroke-width: 1px;
+		stroke: white;
+		fill: rgba(0, 0, 0, 0.6);
+		
+	}
+	.tip {
+	  line-height: 1;
+	  font-weight: bold;
+	  padding: 12px;
+	  background: rgba(0, 0, 0, 0.8);
+	  color: #fff;
+	  border-radius: 2px;
+	  width:250px!important;
+	  max-height:140px!important;
+	  overflow-y: scroll;
+	}
+/*	.states path:hover, path.highlighted {
+		fill: tomato;
+	}*/
+
+	.arcs path {
+	  /*stroke-width: 0.3px;*/
+	  /*stroke: tomato;*/
+	  fill: none;
+	}
+
+	.node {
+	  stroke: white;
+	  stroke-width: 1px;
+	}
+
+
+</style>
+</html>

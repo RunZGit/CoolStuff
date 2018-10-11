@@ -1,0 +1,41 @@
+.node {
+  stroke: #000;
+  stroke-width: 1.5px;
+  fill: #8cc;
+}
+
+.link {
+  stroke: #999;
+}
+
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.axis,
+.frame {
+  shape-rendering: crispEdges;
+}
+
+
+.tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #000;
+  border-radius: 2px;
+  width:300px!important;
+  max-height:150px!important;
+  overflow-y:scroll
+}
+
+/* Style northward tooltips differently */
+.tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+

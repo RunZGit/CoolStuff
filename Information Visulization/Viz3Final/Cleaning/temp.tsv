@@ -1,0 +1,333 @@
+ID	old_name	x	y	name	city	state	country	lat	lon
+1	Wiley Post-Will Rogers Mem	0.4407	0.091	Wiley Post Will Rogers Memorial Airport	Barrow	Alaska	United States	71.2892	-156.772
+2	Deadhorse	0.483	0.1014	Deadhorse Airport	Prudhoe Bay	Alaska	United States	70.1975	-148.458
+3	Ralph Wien Memorial	0.411	0.133	Ralph Wien Memorial Airport	Kotzebue	Alaska	United States	66.8893	-162.61
+4	Fairbanks International	0.4861	0.1528	Fairbanks International Airport	Fairbanks	Alaska	United States	64.8183	-147.866
+5	Nome	0.3965	0.1557	Nome Airport	Nome	Alaska	United States	64.5125	-165.445
+6	St Mary\'s	0.4074	0.1791	Alaska	Saint Marys	Alaska	United States	62.0503	-163.179
+7	Aniak	0.4266	0.1837	Aniak Airport	Bethel	Alaska	United States	61.5742	-159.535
+8	Anchorage International	0.4752	0.1876	Anchorage International Airport	Anchorage	Alaska	United States	61.1767	-149.961
+9	Tuluksak	0.4193	0.1883	Tuluksak	Tuluksak	Alaska	United States	61.0959	-160.968
+10	Akiachak	0.4169	0.1901	Akiachak	Akiachak	Alaska	United States	60.9057	-161.424
+11	Akiak	0.418	0.1901	Akiak Airport	Bethel	Alaska	United States	60.8866	-161.218
+12	Kwethluk	0.4169	0.1911	Kwethluk Airport	Kwethluk	Alaska	United States	60.8	-161.45
+13	Bethel	0.4149	0.1913	Bethel Airport	Bethel	Alaska	United States	60.7788	-161.847
+14	Napaskiak	0.4152	0.1921	Alaska	Napaskiak	Alaska	United States	60.7049	-161.766
+15	Napakiak	0.4142	0.1922	Napaskiak	Napakiak	Alaska	United States	60.7049	-161.766
+16	Merle K (Mudhole) Smith	0.4982	0.1941	Merle K Mudhole Smith Airport	Cordova	Alaska	United States	60.4924	-145.475
+17	Tuntutuliak	0.4107	0.1956	Tuntutuliak	Tuntutuliak	Alaska	United States	60.3432	-162.664
+18	Eek	0.414	0.1967	Eek Airport	Eek	Alaska	United States	60.2167	-162.017
+19	Kongiganak	0.4096	0.1992	Alaska	Kongiganak	Alaska	United States	62.8903	-149.054
+20	Kwigillingok	0.4082	0.2003	Kwigillingok	Kwigillingok	Alaska	United States	59.9077	-163.026
+21	Quinhagak	0.4147	0.2011	Quinhagak	Quinhagak	Alaska	United States	59.7511	-161.908
+22	Yakutat	0.5278	0.2035	Yakutat Airport	Yakutat	Alaska	United States	59.5103	-139.668
+23	Dillingham	0.4319	0.2079	Dillingham Municipal Airport	Dillingham	Alaska	United States	59.0445	-158.513
+24	King Salmon	0.4413	0.2114	King Salmon Airport	King Salmon	Alaska	United States	58.6775	-156.655
+25	Gustavus	0.548	0.2138	Gustavus Airport	Gustavus	Alaska	United States	58.4246	-135.707
+26	Juneau International	0.5537	0.2145	Juneau International Airport	Juneau	Alaska	United States	58.3598	-134.583
+27	Kodiak	0.4625	0.2203	Kodiak Airport	Kodiak	Alaska	United States	57.7545	-152.512
+28	St Paul Island	0.3722	0.2259	Saint Paul Island	Saint Paul Island	Alaska	United States	57.1667	-170.217
+29	Sitka	0.5497	0.227	Sitka Airport	Sitka	Alaska	United States	57.0535	-135.366
+30	Port Heiden	0.4312	0.2278	Port Heiden Airport	Port Heiden	Alaska	United States	56.9667	-158.633
+31	James A Johnson Petersburg	0.562	0.2293	Petersburg James A Johnson Airport	Petersburg	Alaska	United States	56.8067	-132.933
+32	Wrangell	0.565	0.2324	Wrangell Airport	Wrangell	Alaska	United States	56.4876	-132.378
+33	Ketchikan International	0.5683	0.2432	Ketchikan International Airport	Ketchikan	Alaska	United States	55.354	-131.706
+34	Sand Point	0.4216	0.2435	Sand Point Airport	Sand Point	Alaska	United States	55.3184	-160.523
+35	Cold Bay	0.4104	0.2446	Cold Bay Airport	Cold Bay	Alaska	United States	55.2005	-162.705
+36	Unalaska	0.3909	0.2571	Unalaska Airport	Unalaska	Alaska	United States	53.896	-166.535
+37	Eareckson As	0.2924	0.2684	Eareckson As	Shemya	Alaska	United States	52.712222	174.113611
+38	Adak Naf	0.3395	0.2764	Adak Naf	Adak	Alaska	United States	51.878056	-176.646111
+39	Bellingham International	0.615	0.3059	Bellingham International Airport	Bellingham	Washington	United States	48.7955	-122.532
+40	Glacier Park International	0.6572	0.3105	Glacier Park International Airport	Kalispell	Montana	United States	48.3075	-114.252
+41	Minot International	0.7233	0.311	Minot International Airport	Minot	North Dakota	United States	48.2554	-101.291
+42	William R Fairchild International	0.6101	0.3123	William R Fairchild International Airport	Port Angeles	Washington	United States	48.1155	-123.491
+43	Grand Forks Afb	0.743	0.3138	Grand Forks Afb	Grand Forks	North Dakota	United States	47.961111	-97.401111
+44	Grand Forks International	0.7442	0.3139	Grand Forks Mark Andrews International Airport	Grand Forks	North Dakota	United States	47.9494	-97.1762
+45	Spokane International	0.6405	0.3171	Spokane International Airport	Spokane	Washington	United States	47.625	-117.538
+46	Great Falls International	0.6719	0.3184	Great Falls International Airport	Great Falls	Montana	United States	47.482	-111.356
+47	Seattle-Tacoma International	0.6162	0.3188	Tacoma International Airport	Seattle	Washington	United States	47.4405	-122.296
+48	Pangborn Memorial	0.6269	0.3192	Pangborn Memorial Airport	East Wenatchee	Washington	United States	47.4048	-120.21
+49	Grant County	0.6314	0.321	Grant County International Airport	Grant County Airport	Washington	United States	47.20769882	-119.3199997
+50	Missoula International	0.658	0.3238	Missoula International Airport	Missoula	Montana	United States	46.9192	-114.084
+51	Hector International	0.746	0.3238	Hector International Airport	Fargo	North Dakota	United States	46.9195	-96.8243
+52	Duluth International	0.7696	0.3245	Duluth International Airport	Duluth	Minnesota	United States	46.838	-92.1781
+53	Bismarck Muni	0.726	0.3252	Bismarck Municipal Airport	Bismarck	North Dakota	United States	46.7745	-100.757
+54	Pullman/Moscow Regional	0.6427	0.3254	Pullman-Moscow Regional Airport	Pullman	Washington	United States	46.743	-117.119
+55	Helena Regional	0.6688	0.3268	Helena Regional Airport	Helena	Montana	United States	46.6104	-111.99
+56	Yakima Air Terminal	0.6252	0.3271	Yakima Air Terminal	Yakima	Washington	United States	46.5703	-120.54
+57	Marquette County	0.7931	0.3275	Marquette County	Negaunee	Michigan	United States	46.533883	-87.562556
+58	Lewiston-Nez Perce County	0.6431	0.329	Lewiston Nez Perce County Airport	Lewiston	Idaho	United States	46.3776	-117.011
+59	Tri-Cities	0.6324	0.33	Tri-Cities Regional Airport	Blountville	Tennessee	United States	36.4805	-82.4087
+60	Walla Walla Regional	0.6367	0.3317	Walla Walla Regional Airport	Walla Walla	Washington	United States	46.0879	-118.283
+61	Bert Mooney	0.6662	0.333	Bert Mooney Airport	Butte	Montana	United States	45.9544	-112.503
+62	Billings Logan International	0.6863	0.3344	Logan International Airport	Billings	Montana	United States	45.8034	-108.537
+63	Gallatin Field	0.673	0.3347	Gallatin Field Airport	Bozeman	Montana	United States	45.7722	-111.157
+64	Eastern Oregon Regional At Pen	0.6338	0.3355	Eastern Oregon Regional Airport	Pendleton	Oregon	United States	45.6893	-118.839
+65	Portland International	0.6147	0.3365	Portland International Airport	Portland	Oregon	United States	45.5867	-122.587
+66	Mcnary Fld	0.6127	0.343	Mcnary Fld	Salem	Oregon	United States	44.909444	-123.0025
+67	Minneapolis-St Paul Intl/Wold-	0.7644	0.3432	Minneapolis St Paul International Airport	St. Paul	Minnesota	United States	44.8793	-93.1987
+68	Bangor International	0.8885	0.3439	Bangor International Airport	Bangor	Maine	United States	44.8086	-68.8167
+69	Central Wisconsin	0.7824	0.3442	Central Wisconsin Airport	Mosinee	Wisconsin	United States	44.7846	-89.6704
+70	Cherry Capital	0.8032	0.3446	Cherry Capital Airport	Traverse City	Michigan	United States	44.7365	-85.5796
+71	Austin Straubel International	0.7903	0.347	Austin Straubel International Airport	Green Bay	Wisconsin	United States	44.4923	-88.1274
+72	Burlington International	0.8665	0.3472	Burlington International Airport	South Burlington	Vermont	United States	44.4688	-73.1552
+73	Outagamie County	0.7883	0.3492	Outagamie County Airport	Appleton	Wisconsin	United States	44.2603	-88.5111
+74	Roberts Field	0.6221	0.3492	Roberts Field Airport	Redmond	Oregon	United States	44.2533	-121.162
+75	Mahlon Sweet Field	0.6116	0.3505	Mahlon Sweet Field Airport	Eugene	Oregon	United States	44.1184	-123.213
+76	Rapid City Regional	0.7142	0.3512	Rapid City Regional Airport	Rapid City	South Dakota	United States	44.037	-103.06
+77	Wittman Regional	0.7881	0.3518	Wittman Regional Airport	Oshkosh	Wisconsin	United States	43.9844017	-88.55699921
+78	Rochester International	0.768	0.3525	Rochester International	Rochester	Minnesota	United States	43.908333	-92.5
+79	La Crosse Muni	0.7743	0.3528	La Crosse Municipal Airport	La Crosse	Wisconsin	United States	43.8751	-91.2638
+80	Portland International Jetport	0.881	0.355	Jetport International Airport	Portland	Maine	United States	43.6475	-70.3103
+81	Jackson Hole	0.6751	0.3554	Jackson Hole Airport	Jackson	Wyoming	United States	43.6034	-110.736
+82	Joe Foss Field	0.7464	0.3557	Sioux Falls Regional Airport	Sioux Falls	South Dakota	United States	43.5813	-96.7317
+83	Boise Air Terminal /Gowen Fld/	0.6472	0.3558	Boise Air Terminal	Boise	Idaho	United States	43.5709	-116.222
+84	Mbs International	0.8109	0.3561	MBS International Airport	Freeland	Michigan	United States	43.5311	-84.0933
+85	Fanning Field	0.6683	0.3563	Fanning Field Airport	Idaho Falls	Idaho	United States	43.5147	-112.068
+86	Friedman Memorial	0.657	0.3564	Friedman Memorial Airport	Hailey	Idaho	United States	43.5065	-114.301
+87	North Bend Muni	0.6063	0.3572	North Bend Municipal Airport	North Bend	Oregon	United States	43.4141	-124.244
+88	Muskegon County	0.7999	0.3596	Muskegon County Airport	Muskegon	Michigan	United States	43.1646	-86.2367
+89	Oneida County	0.8552	0.3598	Rhinelander-Oneida County Airport	Rhinelander	Wisconsin	United States	45.626	-89.4626
+90	Dane County Regional-Truax Fie	0.7841	0.3599	Dane County Regional Airport-Truax Field	Madison	Wisconsin	United States	43.1351	-89.3465
+91	Greater Rochester International	0.8435	0.3601	Greater Rochester International Airport	Rochester	New York	United States	43.1309	-77.6697
+92	Syracuse Hancock International	0.8515	0.3602	Hancock International Airport	Syracuse	New York	United States	43.1141	-76.1121
+93	Bishop International	0.8126	0.3615	Bishop International Airport	Flint	Michigan	United States	42.9756	-83.7411
+94	General Mitchell International	0.7914	0.3617	General Mitchell International Airport	Milwaukee	Wisconsin	United States	42.9471	-87.9051
+95	Greater Buffalo International	0.8381	0.3618	Greater Buffalo International Airport	Buffalo	New York	United States	42.9309	-78.738
+96	Manchester	0.8753	0.3619	Manchester‚ÄìBoston Regional Airport	Manchester	New Hampshire	United States	42.9325	-71.435556
+97	Pocatello Regional	0.6657	0.3621	Pocatello Municipal Airport	Pocatello	Idaho	United States	42.9056	-112.588
+98	Natrona County International	0.6969	0.3621	Natrona County International Airport	Casper	Wyoming	United States	42.8966	-106.465
+99	Gerald R. Ford International Airport	0.8035	0.3623	Gerald R. Ford International Airport	Cascade Charter Township	Michigan	United States	42.880833	-85.522778
+100	Capital City	0.8083	0.3633	Lansing Capital City Airport	Lansing	Michigan	United States	42.7728	-84.5888
+101	Albany County	0.8632	0.3636	Albany County	Latham	New York	United States	42.749167	-73.801944
+102	Waterloo Muni	0.7685	0.3655	Waterloo Municipal Airport	Waterloo	Iowa	United States	42.5509	-92.3951
+103	Tompkins County	0.8497	0.3661	Tompkins County Airport	Ithaca	New York	United States	42.4898	-76.4627
+104	Twin Falls-Sun Valley Regional	0.656	0.3662	Twin Falls-Sun Valley Regional Airport	Twin Falls	Idaho	United States	42.4838	-114.485
+105	Detroit City	0.8163	0.3669	Detroit City	Detroit	Michigan	United States	42.409167	-83.01
+106	Sioux Gateway	0.7482	0.3669	Sioux Gateway Airport	Sioux City	Iowa	United States	42.4012	-96.3784
+107	Dubuque Regional	0.7771	0.3669	Dubuque Regional Airport	Dubuque	Iowa	United States	42.4047	-90.7037
+108	Rogue Valley Intl- M	0.6133	0.3672	Rogue Valley International-Medford Airport	Central Point	Oregon	United States	42.3691	-122.874
+109	General Edward Lawrence Logan	0.8775	0.3673	Gen E L Logan International Airport	Boston	Massachusetts	United States	42.3717	-71.0281
+110	Worcester Muni	0.873	0.3682	Worcester Municipal Airport	Worcester	Massachusetts	United States	42.2699	-71.8706
+111	Kalamazoo/Battle Creek Interna	0.8034	0.3685	Kalamazoo-Battle Creek International Airport	Kalamazoo	Michigan	United States	42.2398	-85.5563
+112	Detroit Metropolitan Wayne Cou	0.8146	0.3687	Detroit Metropolitan Wayne County Airport	Detroit	Michigan	United States	42.2327	-83.3412
+113	Binghamton Regional/Edwin A Li	0.8521	0.3688	Greater Binghamton Edwin A Link Field Airport	Johnson City	New York	United States	42.2082	-75.9825
+114	Greater Rockford	0.7853	0.3689	Greater Rockford Airport	Rockford	Illinois	United States	42.2035	-89.0955
+115	Elmira/Corning Regional	0.8475	0.3692	Elmira Corning Regional Airport	Horseheads	New York	United States	42.1633	-76.8973
+116	Klamath Falls International	0.6191	0.3693	Klamath Falls International Airport	Klamath Falls	Oregon	United States	42.1638	-121.745
+117	Erie International	0.8308	0.37	Erie International Airport	Erie	Pennsylvania	United States	42.0829	-80.1824
+118	Chicago O'hare International	0.7914	0.371	Chicago O'Hare International Airport	Chicago	Illinois	United States	41.9796	-87.8825
+119	Bradley International	0.8689	0.3714	Bradley International Airport	Windsor Locks	Connecticut	United States	41.9271	-72.6816
+120	Cedar Rapids Muni	0.772	0.3719	Cedar Rapids Municipal Airport	Cedar Rapids	Iowa	United States	41.8893	-91.7008
+121	William B. Heilig Field	0.7115	0.372	William B Heilig Field Airport	Scottsbluff	Nebraska	United States	41.8683	-103.597
+122	Merrill C Meigs	0.7929	0.3721	Merrill C Meigs	Merrill C Meigs	illinois	United States	41.86	-87.608611
+123	Chicago Midway	0.7922	0.3728	Chicago Midway International Airport	Chicago	Illinois	United States	41.7875	-87.7416
+124	Jack Mc Namara Field	0.6064	0.3729	Jack Mcnamara Field Airport	Crescent City	California	United States	41.7765	-124.237
+125	Theodore Francis Green State	0.8753	0.3734	Theodore Francis Green State Airport	Warwick	Rhode Island	United States	41.723	-71.4399
+126	Michiana Rgnl Transportation C	0.7995	0.3736	South Bend Regional Airport	South Bend	Indiana	United States	41.7006	-86.311
+127	Toledo Express	0.8123	0.3747	Toledo Express Airport	Swanton	Ohio	United States	41.5923	-83.8072
+128	Des Moines International	0.7621	0.3752	Des Moines International Airport	Des Moines	Iowa	United States	41.5328	-93.6481
+129	Stewart Int'l	0.8617	0.3755	Stewart International Airport	New Windsor	New York	United States	41.4869	-74.0974
+130	Quad-City	0.7781	0.376	Quad City Airport	Coal Valley	Illinois	United States	41.4539	-90.5058
+131	Cleveland-Hopkins International	0.8222	0.3764	Hopkins International Airport	Cleveland	Ohio	United States	41.4115	-81.8339
+132	Wilkes-Barre/Scranton International	0.8534	0.3771	Wilkes Barre Scranton International Airport	Pittston	Pennsylvania	United States	41.3354	-75.7294
+133	Eppley Airfield	0.7507	0.3774	Eppley Airfield	Omaha	Nebraska	United States	41.3	-95.8998
+134	Tweed-New Haven	0.8679	0.3778	Tweed New Haven Airport	East Haven	Connecticut	United States	41.2709	-72.89
+135	Youngstown-Warren Regional	0.8282	0.3779	Youngstown-Warren Regional Airport	Vienna	Ohio	United States	41.2576	-80.6648
+136	Westchester County	0.8637	0.3797	Westchester County Airport	Purchase	New York	United States	41.0693	-73.7042
+137	Fort Wayne International	0.8052	0.3805	Fort Wayne Municipal Airport-Baer Field	Fort Wayne	Indiana	United States	40.9883	-85.1899
+138	Arcata	0.607	0.3805	Arcata Airport	Mckinleyville	California	United States	40.9698	-124.108
+139	Akron-Canton Regional	0.8243	0.3811	Akron Canton Regional Airport	Canton	Ohio	United States	40.9149	-81.4309
+140	Lincoln Muni	0.7463	0.3818	Lincoln Municipal Airport	Lincoln	Nebraska	United States	40.8461	-96.7543
+141	University Park	0.8426	0.3818	University Park Airport	State College	Pennsylvania	United States	40.8515	-77.851
+142	Elko Muni-J.C. Harris Field	0.6494	0.382	Elko Municipal Airport-J C Harris Field	Elko	Nevada	United States	40.829	-115.78
+143	Long Island Mac Arthur	0.8668	0.3823	Long Island Macarthur Airport	Ronkonkoma	New York	United States	40.7891	-73.0984
+144	Salt Lake City International	0.6688	0.3824	Salt Lake City International Airport	Salt Lake City	Utah	United States	40.7862	-111.982
+145	Burlington Regional	0.775	0.3824	Burlington Alamance Regional Airport	Burlington	North Carolina	United States	36.04850006	-79.47489929
+146	La Guardia	0.8629	0.3825	LaGuardia Airport	Flushing	New York	United States	40.7731	-73.8756
+147	Newark International	0.8614	0.3833	Newark International Airport	Newark	New Jersey	United States	40.6924	-74.1843
+148	Greater Peoria Regional	0.7823	0.3835	Greater Peoria Regional Airport	Peoria	Illinois	United States	40.6663	-89.6909
+149	Lehigh Valley International	0.8549	0.3837	Lehigh Valley International Airport	Allentown	Pennsylvania	United States	40.6514	-75.4342
+150	John F Kennedy International	0.8633	0.3838	John F Kennedy International Airport	Jamaica	New York	United States	40.6437	-73.79
+151	Redding Muni	0.6163	0.385	Redding Municipal Airport	Redding	California	United States	40.5056	-122.302
+152	Pittsburgh International	0.8305	0.3852	Pittsburgh International Airport	Coraopolis	Pennsylvania	United States	40.4914	-80.2328
+153	Yampa Valley	0.693	0.3853	Yampa Valley Airport	Hayden	Colorado	United States	40.485	-107.219
+154	Bloomington/Normal	0.7862	0.3853	Bloomington Normal Airport	Bloomington	Illinois	United States	40.4841	-88.9134
+155	Purdue University	0.7963	0.3859	Purdue University Airport	Lafayette	Indiana	United States	40.41230011	-86.93689728
+156	Mercer County	0.8581	0.3872	Mercer County Airport	Bluefield	New Jersey	United States	37.29579926	-81.20770264
+157	Harrisburg International	0.8481	0.388	Harrisburg International Airport	Middletown	Pennsylvania	United States	40.1962	-76.7564
+158	University Of Illinois-Willard	0.7895	0.3895	University of Illinois-Willard Airport	Savoy	Illinois	United States	40.0367	-88.2638
+159	Port Columbus International	0.8169	0.3899	Port Columbus International Airport	Columbus	Ohio	United States	39.9974	-82.8877
+160	Quincy Muni Baldwin Field	0.7746	0.3904	Quincy Municipal Airport-Baldwin Field	Quincy	Illinois	United States	39.9348	-91.196
+161	James M Cox Dayton International	0.8102	0.3908	James M Cox Dayton International Airport	Dayton	Ohio	United States	39.8968	-84.2207
+162	Philadelphia International	0.8559	0.3911	Philadelphia International Airport	Philadelphia	Pennsylvania	United States	39.8768	-75.2419
+163	Capital	0.7824	0.3914	Lansing Capital City Airport	Lansing	Michigan	United States	42.7728	-84.5888
+164	Decatur	0.7865	0.3915	Decatur Airport	Decatur	Illinois	United States	39.8335	-88.8773
+165	Chico Muni	0.6185	0.3918	Chico Municipal Airport	Chico	California	United States	39.7987	-121.854
+166	Stapleton International	0.7049	0.392	Stapleton International	Stapleton	Colorado	United States	39.760722	-104.891972
+167	Indianapolis International	0.7996	0.3926	Indianapolis International Airport	Indianapolis	Indiana	United States	39.7322	-86.2707
+168	Eagle County Regional	0.6946	0.3933	Eagle County Regional Airport	Gypsum	Colorado	United States	39.6395	-106.912
+169	Reno/Tahoe International	0.6291	0.3947	Reno-Tahoe International Airport	Reno	Nevada	United States	39.5064	-119.776
+170	Atlantic City International	0.8593	0.3951	Atlantic City International Airport	Egg Harbor City	New Jersey	United States	39.4512	-74.5716
+171	Hulman Regional	0.7944	0.3951	Terre Haute International Hulman Field	Terre Haute	Indiana	United States	39.45149994	-87.30760193
+172	Kansas City International	0.7567	0.3966	Kansas City International Airport	Kansas City	Missouri	United States	39.2992	-94.7171
+173	Aspen-Pitkin Co/Sardy Field	0.6948	0.3973	Aspen Pitkin County Airport-Sardy Field	Aspen	Colorado	United States	39.2197	-106.864
+174	Baltimore-Washington International	0.8486	0.3978	Baltimore-Washington International Thurgood Mars	Baltimore	Maryland	United States	39.1841	-76.6745
+175	Walker Field	0.6864	0.3983	Walker Field Airport	Grand Junction	Colorado	United States	39.1217	-108.529
+176	Cincinnati/Northern Kentucky I	0.8079	0.399	Greater Cincinnati International Airport	Hebron	Ohio	United States	39.0571	-84.6625
+177	Washington Dulles International	0.8446	0.4	Dulles International Airport	Washington	Virginia	United States	38.9556	-77.4484
+178	Lake Tahoe	0.628	0.4005	Lake Tahoe Airport	South Lake Tahoe	California	United States	38.89390182	-119.9950027
+179	Washington National	0.8467	0.4008	Washington National Airport	Arlington	Virginia	United States	38.849	-77.0438
+180	Columbia Regional	0.7694	0.4012	Columbia Regional Airport	Columbia	Missouri	United States	38.8174	-92.2218
+181	City Of Colorado Springs Muni	0.7059	0.4013	City of Colorado Springs Municipal Airport	Colorado Springs	Colorado	United States	38.7829	-104.697
+182	Lambert-St Louis International	0.7789	0.4018	Lambert St Louis International Airport	St. Louis	Missouri	United States	38.7414	-90.3647
+183	Sacramento Metropolitan	0.6198	0.4023	Sacramento International Airport	Sacramento	California	United States	38.695556	-121.590833
+184	Gunnison County	0.6945	0.4039	Gunnison County Airport	Gunnison	Colorado	United States	38.5356	-106.941
+185	Sonoma County	0.6136	0.4041	Sonoma County Airport	Windsor	California	United States	38.511	-122.805
+186	Yeager	0.8235	0.4054	Yeager Airport	Charleston	West Virginia	United States	38.3697	-81.5951
+187	Tri-State/Milton J.Ferguson Fi	0.8186	0.4055	Tri State Walker Long Field Airport	Huntington	West Virginia	United States	38.37	-82.5542
+188	Pueblo Memorial	0.7069	0.4062	Pueblo Memorial Airport	Pueblo	Colorado	United States	38.2836	-104.496
+189	Louisville International	0.8024	0.4073	Louisville International Airport	Louisville	Kentucky	United States	38.1865	-85.7462
+190	Charlottesville-Albemarle	0.8395	0.4077	Charlottesville Albemarle Airport	Earlysville	Virginia	United States	38.14	-78.4487
+191	Evansville Regional	0.7933	0.4086	Evansville Regional Airport	Evansville	Indiana	United States	38.0464	-87.5308
+192	Blue Grass	0.8082	0.4086	Blue Grass Field	Lexington	Kentucky	United States	38.0384	-84.5989
+193	Stockton Metropolitan	0.6216	0.41	Stockton Metropolitan Airport	Stockton	California	United States	37.8973	-121.253
+194	Greenbrier Valley	0.8296	0.4103	Greenbrier Valley Airport	Lewisburg	West Virginia	United States	37.8571	-80.4044
+195	Williamson County Regional	0.7858	0.4114	Williamson County Regional Airport	Marion	Illinois	United States	37.7467	-89.0104
+196	Forney Aaf	0.7698	0.4115	Waynesville Regional Airport At Forney Field	Fort Leonard Wood	Missouri	United States	37.7327	-92.1361
+197	Metropolitan Oakland International	0.6166	0.4117	Oakland International Airport	Oakland	California	United States	37.7158	-122.209
+198	Wichita Mid-Continent	0.7429	0.4123	Wichita Mid-Continent Airport	Wichita	Kansas	United States	37.6531	-97.43
+199	Modesto City-County--Harry Sha	0.6231	0.4126	Modesto City County Airport-Harry Sham Field	Modesto	California	United States	37.6319	-120.959
+200	Mammoth Lakes	0.6339	0.4126	Mammoth June Lakes Airport	Mammoth Lakes	California	United States	37.6288	-118.844
+201	San Francisco International	0.6159	0.4126	San Francisco International Airport	San Francisco	California	United States	37.6148	-122.392
+202	Richmond International	0.8453	0.4137	Richmond	Richmond	Virginia	United States	37.5406	-77.4334
+203	San Jose International	0.6181	0.4151	Norman Y Mineta San Jose International Airport	San Jose	California	United States	37.3679	-121.926
+204	Roanoke Regional/Woodrum Field	0.8318	0.4154	Roanoke Regional Airport-Woodrum Field	Roanoke	Virginia	United States	37.3203	-79.9688
+205	Merced Municipal/Macready Fiel	0.6253	0.4158	Merced Municipal Airport-Macready Field	Merced	California	United States	37.2892	-120.515
+206	Springfield Regional	0.7635	0.4162	Springfield Regional Airport	Springfield	Missouri	United States	37.243	-93.3817
+207	Cape Girardeau Regional	0.7829	0.4164	Cape Girardeau Municipal Airport	Scott City	Missouri	United States	37.2272	-89.5637
+208	Durango-La Plata County	0.6903	0.4171	Durango la Plata County Airport	Durango	Colorado	United States	37.1595	-107.751
+209	Joplin Regional	0.7578	0.4171	Joplin Regional Airport	Webb City	Missouri	United States	37.147	-94.5019
+210	Newport News/Williamsburg Inte	0.8495	0.4173	Newport News-Williamsburg International Airport	Newport News	Virginia	United States	37.1306	-76.5026
+211	Barkley Regional	0.787	0.418	Barkley Regional Airport	West Paducah	Kentucky	United States	37.0612	-88.7672
+212	Norfolk International	0.851	0.4196	Norfolk International Airport	Norfolk	Virginia	United States	36.8977	-76.2154
+213	Fresno Air Terminal	0.6294	0.4207	Amedee Army Air Field	Herlong	California	United States	40.2664	-120.151
+214	Monterey Peninsula	0.6186	0.4225	Monterey Peninsula Airport	Monterey	California	United States	36.5872	-121.851
+215	Tri-Cities Regional Tn/Va	0.8194	0.4236	Tri-Cities Regional Airport	Blountville	Tennessee	United States	36.4805	-82.4087
+216	Tulsa International	0.7507	0.4262	Tulsa International Airport	Tulsa	Oklahoma	United States	36.1877	-95.8892
+217	Nashville International	0.7976	0.4269	Nashville International Airport	Nashville	Tennessee	United States	36.1342	-86.6682
+218	Piedmont Triad International	0.832	0.4272	Triad International Airport	Greensboro	North Carolina	United States	36.1038	-79.9427
+219	Mc Carran International	0.6526	0.4273	Mccarran International Airport	Las Vegas	Nevada	United States	36.0806	-115.143
+220	Drake Field	0.7595	0.4281	Drake Field	Fayetteville	Arizona	United States	36.00510025	-94.17009735
+221	Raleigh-Durham International	0.8378	0.4293	Durham International Airport	Raleigh/Durham	North Carolina	United States	35.8729	-78.7923
+222	Mc Ghee Tyson	0.8113	0.4299	Mcghee Tyson Airport	Knoxville	Tennessee	United States	35.8064	-83.9889
+223	Asheville Regional	0.8187	0.4335	Asheville Regional Airport	Fletcher	North Carolina	United States	35.4349	-82.5373
+224	Meadows Field	0.6327	0.4335	Kern County-Meadows Field Airport	Bakersfield	California	United States	35.4288	-119.044
+225	Will Rogers World	0.742	0.4339	Will Rogers World Airport	Oklahoma City	Oklahoma	United States	35.3981	-97.5974
+226	Fort Smith Regional	0.7585	0.4344	Smith Field Airport	Fort Smith	Arkansas	United States	36.1881	-94.4944
+227	Kinston Regional Jetport At St	0.8438	0.4345	Kinston Jetport Stallings Airport	Kinston	North Carolina	United States	35.3243	-77.6115
+228	San Luis Obispo County-Mc Ches	0.6247	0.4354	San Luis Obispo County Airport	San Luis Obispo	California	United States	35.239	-120.641
+229	Amarillo International	0.7211	0.4356	Amarillo International Airport	Amarillo	Texas	United States	35.2177	-101.706
+230	Charlotte/Douglas International	0.8268	0.4356	Douglas International Airport	Charlotte	North Carolina	United States	35.2226	-80.946
+231	Flagstaff Pulliam	0.6704	0.4363	Flagstaff Pulliam Airport	Flagstaff	Arizona	United States	35.139	-111.675
+232	Memphis International	0.7808	0.4372	Memphis International Airport	Memphis	Tennessee	United States	35.047	-89.9823
+233	Albuquerque International	0.6961	0.4373	Albuquerque International Airport	Albuquerque	New Mexico	United States	35.0494	-106.625
+234	Lovell Field	0.8052	0.4373	Chattanooga Metropolitan Airport	Chattanooga	Tennessee	United States	35.0373	-85.1966
+235	Fayetteville Regional/Grannis	0.8374	0.4377	Fayetteville Regional Airport	Fayetteville	North Carolina	United States	34.9914	-78.8889
+236	Santa Maria Pub/Capt G Allan H	0.6256	0.4386	Santa Maria Public Airport	Santa Maria	California	United States	34.8888	-120.437
+237	Greenville-Spartanburg	0.8204	0.4386	Greenville Spartanburg International Airport	Greer	South Carolina	United States	34.8907	-82.2167
+238	Albert J Ellis	0.8438	0.4393	Albert J Ellis Airport	Richlands	North Carolina	United States	34.8307	-77.6053
+239	Adams Field	0.7694	0.4402	Adams Field Airport	Little Rock	Arkansas	United States	34.7278	-92.219
+240	Huntsville Intl-Carl T Jones F	0.7972	0.4411	Huntsville International Airport	Huntsville	Alabama	United States	34.6492	-86.7767
+241	Lawton Muni	0.7379	0.4418	Lawton Municipal Airport	Lawton	Oklahoma	United States	34.573	-98.4135
+242	Santa Barbara Muni	0.6288	0.4431	Santa Barbara Municipal Airport	Goleta	California	United States	34.4255	-119.835
+243	New Hanover International	0.8423	0.4446	Wilmington International Airport	Wilmington	North Carolina	United States	34.2668	-77.912
+244	Oxnard	0.632	0.4453	Oxnard Airport	Oxnard	California	United States	34.1984	-119.206
+245	Burbank-Glendale-Pasadena	0.6363	0.4453	Burbank Glendale Pasadena Airport	Burbank	California	United States	34.1963	-118.352
+246	Ontario International	0.6402	0.4467	Ontario International Airport	Ontario	California	United States	34.062	-117.594
+247	Sheppard Afb/Wichita Falls Mun	0.7375	0.4474	Sheppard Air Force Base	Wichita Falls	Texas	United States	33.9862	-98.4984
+248	Los Angeles International	0.6361	0.4478	Los Angeles International Airport	Los Angeles	California	United States	33.9456	-118.391
+249	Columbia Metropolitan	0.826	0.4478	Columbia Metropolitan Airport	West Columbia	South Carolina	United States	33.9468	-81.1241
+250	Palm Springs Regional	0.6457	0.4489	Palm Springs International Airport	Palm Springs	California	United States	33.8227	-116.509
+251	Long Beach /Daugherty Field/	0.6374	0.449	Long Beach Daugherty Field Airport	Long Beach	California	United States	33.8186	-118.144
+252	Myrtle Beach International	0.8371	0.4503	Myrtle Beach International Airport	Myrtle Beach	South Carolina	United States	33.6821	-78.9228
+253	John Wayne Airport-Orange Coun	0.6388	0.4503	John Wayne Airport	Arthurville	Santa Ana	United States	33.675556	-117.868333
+254	Lubbock International	0.7205	0.4504	Lubbock International Airport	Lubbock	Texas	United States	33.6566	-101.821
+255	The William B Hartsfield Atlan	0.8091	0.4506	Hartsfield-Jackson Atlanta International Airport	Atlanta	Georgia	United States	33.6558	-84.4333
+256	Birmingham International	0.7973	0.4514	Birmingham International Airport	Birmingham	Alabama	United States	33.563889	 -86.752222
+257	Texarkana Regional-Webb Field	0.7604	0.4524	Texarkana Regional Airport	Texarkana	Arkansas	United States	33.457	-93.9943
+258	Phoenix Sky Harbor International	0.6686	0.4526	Sky Harbor International Airport	Phoenix	Arizona	United States	33.4376	-112.03
+259	Bush Field	0.8216	0.4532	Bush Field Airport	Augusta	Georgia	United States	33.3735	-81.9732
+260	Charleston Afb/Intl	0.8314	0.4577	Charleston International Airport	North Charleston	South Carolina	United States	32.8838	-80.0356
+261	Dallas/Fort Worth International	0.7449	0.4578	Fort Worth International Airport	Dallas	Texas	United States	32.9222	-97.0409
+262	Dallas Love Field	0.7458	0.4582	Dallas Love Field Airport	Dallas	Texas	United States	32.8439	-96.8496
+263	San Diego Intl-Lindbergh Fld	0.6423	0.4593	San Diego International Airport	San Diego	California	United States	32.7299	-117.195
+264	Yuma Mcas/Yuma International	0.6554	0.46	Yuma International Airport	Yuma	Arizona	United States	32.6685	-114.599
+265	Columbus Metropolitan	0.8065	0.4614	Columbus Metropolitan Airport	Columbus	Georgia	United States	32.5184	-84.9401
+266	Monroe Regional	0.7703	0.4614	Monroe Regional Airport	Monroe	Louisiana	United States	32.5099	-92.044
+267	Shreveport Regional	0.7612	0.4621	Shreveport Regional Airport	Shreveport	Louisiana	United States	32.4549	-93.8285
+268	Abilene Regional	0.7314	0.4624	Abilene Regional Airport	Abilene	Texas	United States	32.4164	-99.6803
+269	Gregg County	0.7567	0.4626	Gregg County Airport	Longview	Texas	United States	32.3874	-94.7194
+270	Tyler Pounds Field	0.7532	0.4629	Tyler Pounds Field Airport	Tyler	Texas	United States	32.3506	-95.4118
+271	Jackson International	0.7803	0.4634	Jackson International Airport	Pearl	Mississippi	United States	32.3089	-90.0733
+272	Dannelly Field	0.7991	0.4635	Montgomery Regional Airport	Montgomery	Alabama	United States	32.3049	-86.3909
+273	Savannah International	0.8255	0.4651	Savannah International Airport	Savannah	Georgia	United States	32.1338	-81.2133
+274	Tucson International	0.6741	0.4652	Tucson International Airport	Tucson	Arizona	United States	32.1204	-110.936
+275	Midland International	0.7186	0.4669	Midland International Airport	Midland	Texas	United States	31.9361	-102.208
+276	El Paso International	0.6973	0.4682	El Paso International Airport	El Paso	Texas	United States	31.7982	-106.393
+277	Waco Regional	0.7439	0.47	Waco Regional Airport	Waco	Texas	United States	31.609	-97.2234
+278	Alexandria Esler Regional	0.769	0.4721	Esler Regional Airport	Alexandria	Louisiana	United States	31.39489937	-92.29579926
+279	Mathis Field	0.7273	0.4725	Mathis Field Airport	San Angelo	Texas	United States	31.3616	-100.507
+280	Killeen Muni	0.7416	0.4751	Killeen-Fort Hood Regional Airport	Killeen	Texas	United States	31.0615	-97.8206
+281	Mobile Regional	0.7897	0.4788	Mobile Regional Airport	Mobile	Alabama	United States	30.6775	-88.243
+282	Easterwood Field	0.7483	0.4798	Easterwood Field Airport	College Station	Texas	United States	30.5938	-96.3685
+283	Baton Rouge Metropolitan, Ryan	0.7749	0.4803	Baton Rouge Metropolitan Airport	Baton Rouge	Louisiana	United States	30.533	-91.1567
+284	Jacksonville International	0.8231	0.4807	Jacksonville International Airport	Jacksonville	Florida	United States	30.4914	-81.676
+285	Eglin Afb	0.7984	0.4808	Eglin Air Force Base	Eglin Village	Florida	United States	30.496	-86.55
+286	Pensacola Regional	0.7951	0.4809	Pensacola Regional Airport	Pensacola	Florida	United States	30.4761	-87.1941
+287	Tallahassee Regional	0.8095	0.4816	Tallahassee Regional Airport	Tallahassee	Florida	United States	30.3964	-84.3503
+288	Robert Mueller Municipal Airport	0.7415	0.4826	Robert Mueller Municipal Airport	Austin	Texas	United States	30.3	-97.7
+289	Panama City-Bay Co International	0.8027	0.4834	Panama City Bay County Airport	Panama City	Florida	United States	30.2071	-85.6829
+290	Lafayette Regional	0.7706	0.4835	Lafayette Regional Airport	Lafayette	Louisiana	United States	30.2084	-91.9935
+291	Lake Charles Regional	0.7643	0.4842	Lake Charles Regional Airport	Lake Charles	Louisiana	United States	30.1235	-93.2198
+292	New Orleans Intl/Moisant Fld/	0.7794	0.4855	New Orleans International Airport	Kenner	Louisiana	United States	29.983	-90.2569
+293	Houston Intercontinental	0.7535	0.4856	George Bush Intercontinental Airport	Houston	Texas	United States	29.9784	-95.3424
+294	Jefferson County	0.7602	0.4859	Jefferson County Airport	Beaumont	Texas	United States	29.9551	-94.0185
+295	Gainesville Regional	0.8201	0.4884	Gainesville Regional Airport	Gainesville	Florida	United States	29.6861	-82.277
+296	William P Hobby	0.7538	0.4888	William P Hobby Airport	Houston	Texas	United States	29.6572	-95.2795
+297	San Antonio International	0.7376	0.4899	San Antonio International Airport	San Antonio	Texas	United States	29.5252	-98.4729
+298	Daytona Beach International	0.8263	0.4933	Daytona Beach International Airport	Daytona Beach	Florida	United States	29.1874	-81.0615
+299	Orlando International	0.825	0.5004	Orlando International Airport	Orlando	Florida	United States	28.4418	-81.3115
+300	Melbourne International	0.8284	0.5036	Melbourne International Airport	Melbourne	Florida	United States	28.0957	-80.6282
+301	Tampa International	0.8188	0.5048	Tampa International Airport	Tampa	Florida	United States	27.9744	-82.5356
+302	St Petersburg/Clearwater International	0.818	0.5054	St. Petersburg-Clearwater International Airport	Clearwater	Florida	United States	27.9065	-82.6924
+303	Corpus Christi International	0.7425	0.5067	Corpus Christi International Airport	Corpus Christi	Texas	United States	27.7747	-97.5019
+304	Laredo International	0.7325	0.5089	Laredo International Airport	Laredo	Texas	United States	27.5431	-99.4555
+305	Sarasota/Bradenton International	0.8186	0.5103	Sarasota Bradenton Airport	Sarasota	Florida	United States	27.3868	-82.5516
+306	Palm Beach International	0.8312	0.5171	Palm Beach International Airport	West Palm Beach	Florida	United States	26.6909	-80.0889
+307	Southwest Florida International	0.8227	0.5185	Southwest Florida International Airport	Fort Myers	Florida	United States	26.5228	-81.7531
+308	Rio Grande Valley International	0.7417	0.5215	Grande Valley International Airport	Harlingen	Texas	United States	26.2216	-97.663
+309	Mc Allen Miller International	0.7388	0.522	Miller International Airport	Mcallen	Texas	United States	26.1813	-98.2404
+310	Fort Lauderdale/Hollywood International	0.8309	0.523	Fort Lauderdale Hollywood International Airport	Dania Beach	Florida	United States	26.0722	-80.1354
+311	Miami International	0.8302	0.5256	Miami International Airport	Miami	Florida	United States	25.7953	-80.2727
+312	Lihue	0.4276	0.5621	Lihue Airport	Lihue	Hawaii	United States	21.9782	-159.351
+313	Honolulu International	0.4348	0.5684	Honolulu International Airport	Honolulu	Hawaii	United States	21.3358	-157.919
+314	Molokai	0.439	0.57	Molokai Airport	Hoolehua	Hawaii	United States	21.1557	-157.094
+315	Kapalua	0.4412	0.5718	Kapalua West Maui Airport	Lahaina	Hawaii	United States	20.9619	-156.676
+316	Kahului	0.4424	0.5724	Kahului Airport	Kahului	Hawaii	United States	20.8926	-156.441
+317	Lanai	0.4398	0.5735	Lanai Airport	Lanai City	Hawaii	United States	20.7909	-156.951
+318	Keahole-Kona International	0.4444	0.5835	Kailua-Kona International Airport	Kailua Kona	Hawaii	United States	19.7334	-156.039
+319	Hilo International	0.4495	0.5837	Hilo International Airport	Hilo	Hawaii	United States	19.7126	-155.042
+320	Rafael Hernandez	0.8972	0.5954	Rafael Hernandez Airport	Aguadilla	Puerto Rico	United States	18.496	-67.1357
+321	Luis Munoz Marin International	0.9029	0.5959	Luis Munoz Marin Airport	Carolina	Puerto Rico	United States	18.4367	-66.0095
+322	Cyril E King	0.9082	0.5969	Cyril E King International Airport	Charlotte Amalie	US Virgin Islands	United States	18.3333	-64.9667
+323	Eugenio Maria De Hostos	0.8971	0.5977	Eugenio Maria de Hostos Airport	Mayaguez	Puerto Rico	United States	18.2531	-67.1489
+324	Mercedita	0.9001	0.6	Mercedita Airport	Coto Laurel	Puerto Rico	United States	18.0116	-66.5664
+325	Alexander Hamilton	0.9091	0.6029	Henry E Rohlson International Airport	Frederiksted	US Virgin Islands	United States	17.6988	-64.7977
+326	Johnston Atoll	0.3757	0.6122	Johnston Atoll Airport	Johnston Island	Hawaii	United States	16.72859955	-169.5339966
+327	Saipan International	0.1479	0.6276	Saipan International Airport	Saipan	Northern Mariana Islands	United States	15.1333	145.717
+328	Rota International	0.1454	0.6366	Rota International Airport	Rota	Northern Mariana Islands	United States	14.1667	145.25
+329	Guam International	0.1431	0.6432	Antonio B Won Pat International Airport	Hag√•t√±a	Guam	United States	13.4833	144.796
+330	Babelthuap/Koror	0.0909	0.7017	Koror Airport	Koror	Koror	Palau	7.35743	134.547
+331	Pago Pago International	0.3697	0.909	Pago Pago International Airport	Pago Pago	American Samoa	United States	-14.3242	-170.706
+332	West Tinian	0.1473	0.6288	Tinian	Tinian	Veneto	Northern Mariana Islands	45.0039	12.2686
